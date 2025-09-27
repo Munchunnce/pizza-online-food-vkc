@@ -3,13 +3,13 @@ import { Link } from 'react-router-dom'
 
 const Navigation = () => {
 
-
   const cartStyle = {
-    background: '#F59E0D',
+    // background: '#FE5F1E',
     display: 'flex',
     padding: '6px 12px',
     borderRadius: '50px',
   }
+
   return (
     <>
       <nav className='container max-auto flex items-center justify-between py-4 m-auto'>
@@ -23,7 +23,7 @@ const Navigation = () => {
           <li className='ml-6'><Link to='/login'>Login</Link></li>
           <li className='ml-6'>
             <Link to='/cart'>
-              <div style={cartStyle}>
+              <div className='bg-[#FE5F1E] hover:bg-[#e64e10]' style={cartStyle}>
                 <span>10</span>
                 <img className='ml-2' src="/images/cart.png" alt="cart-icon" />
               </div>

@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import Login from './pages/Login';
 import Cart from './pages/Cart';
 import AllProducts from './pages/AllProducts';
+import SingleProducts from './pages/SingleProducts';
 
 
 function App() {
@@ -15,9 +16,10 @@ function App() {
       <Navigation/>
         <Routes>
           <Route path='/' exact element={<Home/>}></Route>
-          <Route path='/products' element={<AllProducts/>}></Route>
           <Route path='/register' element={<Register/>}></Route>
           <Route path='/login' element={<Login/>}></Route>
+          <Route path='/products' exact element={<AllProducts/>}></Route>
+          <Route path='/products/:_id' element={<SingleProducts/>}></Route>
           <Route path='/cart' element={<Cart/>}></Route>
         </Routes>
       </BrowserRouter>

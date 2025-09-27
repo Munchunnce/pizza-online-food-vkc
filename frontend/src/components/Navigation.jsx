@@ -12,7 +12,7 @@ const Navigation = () => {
 
   return (
     <>
-      <nav className='container max-auto flex items-center justify-between py-4 m-auto'>
+      <nav className='container bg-[#F8F8F8] max-auto flex items-center justify-between py-4 m-auto'>
         <Link to='/'>
           <img style={{ height: 45 }} src="/images/logo.png" alt="logo" />
         </Link>

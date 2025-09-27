@@ -17,14 +17,14 @@ const Navigation = () => {
           <img style={{ height: 45 }} src="/images/logo.png" alt="logo" />
         </Link>
         <ul className='flex items-center'>
-          <li><Link to='/'>Home</Link></li>
-          <li className='ml-6'><Link to='/products'>Products</Link></li>
-          <li className='ml-6'><Link to='/register'>SignIn</Link></li>
-          <li className='ml-6'><Link to='/login'>Login</Link></li>
+          <li><Link to='/' className='hover:text-[#e64e10]'>Home</Link></li>
+          <li className='ml-6 hover:text-[#e64e10]'><Link to='/products'>Products</Link></li>
+          <li className='ml-6 hover:text-[#e64e10]'><Link to='/register'>Register</Link></li>
+          <li className='ml-6 hover:text-[#e64e10]'><Link to='/login'>Login</Link></li>
           <li className='ml-6'>
             <Link to='/cart'>
               <div className='bg-[#FE5F1E] hover:bg-[#e64e10]' style={cartStyle}>
-                <span>10</span>
+                <span className='text-white'>10</span>
                 <img className='ml-2' src="/images/cart.png" alt="cart-icon" />
               </div>
             </Link>

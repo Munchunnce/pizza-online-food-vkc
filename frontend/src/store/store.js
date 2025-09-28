@@ -17,7 +17,9 @@ const saveState = (state) => {
   try {
     const serializedState = JSON.stringify(state);
     localStorage.setItem("cartState", serializedState);
-  } catch {}
+  } catch(err) {
+    console.error("Could not save state", err);
+  }
 };
 
 
@@ -30,7 +32,7 @@ const store = configureStore({
   },
 });
 
-// 🔹 Har state change ke baad localStorage update karna
+//  Har state change ke baad localStorage update karna
 store.subscribe(() => {
   saveState(store.getState().cart);
 });

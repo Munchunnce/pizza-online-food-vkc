@@ -1,7 +1,16 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { add } from "../store/CartSlice";
 
 const Product = ({ product }) => {
+  const dispatch = useDispatch();
+
+  const handleAdd = (e, product) => {
+    e.preventDefault();
+    dispatch(add(product))
+  }
+
   return (
     <Link to={`/products/${product._id}`}>
       <div className="bg-white shadow-md rounded-xl p-4 hover:shadow-lg transition duration-300 flex flex-col">
@@ -30,7 +39,7 @@ const Product = ({ product }) => {
           <span className="font-bold text-sm sm:text-base md:text-lg">
             ₹ {product.price}
           </span>
-          <button className="bg-white border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white py-1 px-3 sm:px-5 rounded-full font-bold cursor-pointer transition-colors duration-200 flex items-center">
+          <button onClick={(e) => handleAdd(e, product)} className="bg-white border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white py-1 px-3 sm:px-5 rounded-full font-bold cursor-pointer transition-colors duration-200 flex items-center">
             <span className="mr-2 text-lg">+</span> ADD
           </button>
         </div>

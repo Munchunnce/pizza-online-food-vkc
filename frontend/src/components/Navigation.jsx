@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+
+  const items = useSelector((state) => state.cart);
 
   const cartStyle = {
     display: "flex",
@@ -57,7 +60,7 @@ const Navigation = () => {
               className="bg-[#FE5F1E] hover:bg-[#e64e10] inline-flex items-center justify-center"
               style={cartStyle}
             >
-              <span className="text-white">10</span>
+              <span className="text-white">{items.length}</span>
               <img className="ml-2" src="/images/cart.png" alt="cart-icon" />
             </div>
           </Link>

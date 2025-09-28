@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   addToCart,
@@ -11,6 +11,9 @@ import { Link } from "react-router-dom";
 const Cart = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
+  // User info for order
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
 
   const handleIncrease = (product) => {
     dispatch(addToCart(product));
@@ -28,14 +31,35 @@ const Cart = () => {
     dispatch(clearCart());
   };
 
-  // ✅ New: Order Now handler
+  // ✅ Order Now handler with address & phone
   const handleOrderNow = () => {
-    if (cart.totalItems > 0) {
-      alert("🎉 Order placed successfully!");
-      dispatch(clearCart());
-    } else {
+    if (cart.totalItems === 0) {
       alert("Cart is empty!");
+      return;
     }
+    if (!phone || !address) {
+      alert("Please enter your phone number and address!");
+      return;
+    }
+
+    // Here you can also send order data to backend API
+    const orderData = {
+      items: cart.items,
+      totalItems: cart.totalItems,
+      totalPrice: Object.values(cart.items).reduce(
+        (acc, item) => acc + item.product.price * item.quantity,
+        0
+      ),
+      phone,
+      address,
+    };
+
+    console.log("Order Placed:", orderData); // Backend API call placeholder
+
+    alert("🎉 Order placed successfully!");
+    dispatch(clearCart());
+    setPhone("");
+    setAddress("");
   };
 
   const totalPrice = Object.values(cart.items).reduce(
@@ -57,10 +81,7 @@ const Cart = () => {
             src="/images/empty-cart.png"
             alt="empty-cart"
           />
-          <Link
-            to="/"
-            className="inline-block mt-12"
-          >
+          <Link to="/" className="inline-block mt-12">
             <button className="bg-white border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white py-1 px-3 sm:px-5 rounded-full font-bold cursor-pointer transition-colors duration-200 flex items-center">
               Go back
             </button>
@@ -118,29 +139,52 @@ const Cart = () => {
         </div>
 
         <hr />
-        <div className="text-right py-4">
-          <div>
-            <span className="text-lg font-bold">Total Amount:</span>
-            <span className="amount text-2xl font-bold ml-2">
-              ₹ {totalPrice}
-            </span>
-          </div>
-          <div className="mt-6 flex justify-end space-x-4">
-            <button
-              onClick={handleClearCart}
-              className="px-6 py-2 rounded-full border border-gray-400 font-bold"
-            >
-              Clear Cart
-            </button>
-            {/* Order Now button */}
-            <button
-              onClick={handleOrderNow}
-              className="px-6 py-2 rounded-full bg-[#FE5F1E] hover:bg-[#e64e10] text-white font-bold transition duration-300"
-            >
-              Order Now
-            </button>
-          </div>
-        </div>
+
+        {/* Phone & Address Form + Total Section */}
+<div className="flex flex-col md:flex-row md:justify-between md:items-start py-6 space-y-4 md:space-y-0 md:space-x-6">
+  {/* Left: Total Amount */}
+  <div className="text-left">
+    <span className="text-lg font-bold">Total Amount:</span>
+    <span className="amount text-2xl font-bold ml-2">
+      ₹ {totalPrice}
+    </span>
+  </div>
+
+  {/* Right: Phone & Address */}
+  <div className="flex flex-col space-y-3 w-full md:w-64">
+    <input
+      type="text"
+      placeholder="Phone"
+      value={phone}
+      onChange={(e) => setPhone(e.target.value)}
+      className="border border-gray-400 px-3 py-1 rounded w-full"
+    />
+    <input
+      type="text"
+      placeholder="Address"
+      value={address}
+      onChange={(e) => setAddress(e.target.value)}
+      className="border border-gray-400 px-3 py-1 rounded w-full"
+    />
+  </div>
+</div>
+
+{/* Buttons */}
+<div className="mt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
+  <button
+    onClick={handleClearCart}
+    className="border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white transition-colors duration-200 px-6 py-2 rounded-full font-bold cursor-pointer"
+  >
+    Clear Cart
+  </button>
+  <button
+    onClick={handleOrderNow}
+    className="px-6 py-2 rounded-full bg-[#FE5F1E] hover:bg-[#e64e10] text-white font-bold transition duration-300 cursor-pointer"
+  >
+    Order Now
+  </button>
+</div>
+
       </div>
     </section>
   );

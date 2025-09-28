@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import { addToCart } from "../store/CartSlice";
+
 
 const SingleProducts = () => {
     const [product, setProduct] = useState({});
     const params = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+const handleAddToCart = () => {
+  dispatch(addToCart(product));
+};
+
 
     useEffect(() => {
         fetch(`/api/products/${params._id}`)
@@ -22,7 +31,7 @@ const SingleProducts = () => {
                 <h1 className='text-xl font-bold'>{product.name}</h1>
                 <div className='text-md text-gray-500'>{product.size}</div>
                 <div className='font-bold mt-2'>₹ {product.price}</div>
-                <button className='bg-white border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white py-1 px-4 mt-4 rounded-full font-bold cursor-pointer transition-colors duration-200'>Add to cart</button>
+                <button onClick={handleAddToCart} className='bg-white border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white py-1 px-4 mt-4 rounded-full font-bold cursor-pointer transition-colors duration-200'>Add to cart</button>
             </div>
        </div>
     </div>

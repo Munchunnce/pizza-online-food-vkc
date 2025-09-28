@@ -20,12 +20,11 @@ const Cart = () => {
   };
 
   const handleDecrease = (productId) => {
-  const item = cart.items[productId];
-  if (item && item.quantity > 1) {
-    dispatch(decreaseQuantity(productId));
-  }
-};
-
+    const item = cart.items[productId];
+    if (item && item.quantity > 1) {
+      dispatch(decreaseQuantity(productId));
+    }
+  };
 
   const handleRemove = (productId) => {
     dispatch(removeFromCart(productId));
@@ -126,15 +125,16 @@ const Cart = () => {
               {/* Middle: Quantity Controls */}
               <div className="flex items-center justify-center mt-3 sm:mt-0 space-x-2">
                 <button
-  onClick={() => handleDecrease(item.product._id)}
-  disabled={item.quantity === 1}
-  className={`px-3 py-1 rounded-full cursor-pointer 
-    ${item.quantity === 1 
-      ? "bg-gray-300 text-gray-500 cursor-not-allowed" 
-      : "bg-gray-200 hover:bg-gray-300"}`}
->
-  -
-</button>
+                  onClick={() => handleDecrease(item.product._id)}
+                  disabled={item.quantity === 1}
+                  className={`px-3 py-1 rounded-full cursor-pointer 
+                    ${item.quantity === 1
+                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                      : "bg-gray-200 hover:bg-gray-300"
+                    }`}
+                >
+                  -
+                </button>
                 <span className="font-medium">{item.quantity} Pcs</span>
                 <button
                   onClick={() => handleIncrease(item.product)}

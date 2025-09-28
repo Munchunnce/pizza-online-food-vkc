@@ -53,7 +53,7 @@ const Products = () => {
             <button
               key={size}
               onClick={() => setFilterSize(size)}
-              className={`px-4 py-2 rounded-full border font-semibold transition duration-300
+              className={`px-4 py-2 rounded-full border font-semibold transition duration-300 cursor-pointer
                 ${
                   filterSize === size
                     ? "bg-[#FE5F1E] text-white border-[#FE5F1E]"
@@ -71,7 +71,7 @@ const Products = () => {
             <button
               key={sort}
               onClick={() => setSortPrice(sort)}
-              className={`px-4 py-2 rounded-full border font-semibold transition duration-300
+              className={`px-4 py-2 rounded-full border font-semibold transition duration-300 cursor-pointer
                 ${
                   sortPrice === sort
                     ? "bg-[#FE5F1E] text-white border-[#FE5F1E]"

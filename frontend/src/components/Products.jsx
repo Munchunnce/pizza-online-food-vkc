@@ -5,6 +5,7 @@ const Products = () => {
   const [products, setProducts] = useState([]);
   const [filterSize, setFilterSize] = useState("all");
   const [sortPrice, setSortPrice] = useState("default"); // low, high, medium
+  const [showFilters, setShowFilters] = useState(false); // toggle filter
 
   useEffect(() => {
     fetch("/api/products")
@@ -34,8 +35,18 @@ const Products = () => {
       <h1 className="text-xl sm:text-2xl md:text-3xl font-bold my-8 text-center md:text-left">
         All Pizza
       </h1>
+      {/* 🔥 Toggle Filter Button */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className="bg-[#FE5F1E] text-white px-4 py-2 rounded-full font-semibold hover:bg-[#e64e10] transition duration-300"
+        >
+          {showFilters ? "Hide Filters" : "Show Filters"}
+        </button>
+      </div>
       {/* 🔥 Filters Section */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+      {showFilters && (
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
         {/* Size Filter */}
         <div className="flex gap-2 flex-wrap">
           {["all", "small", "medium", "large"].map((size) => (
@@ -78,6 +89,7 @@ const Products = () => {
           ))}
         </div>
       </div>
+      )}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 sm:gap-10 md:gap-12 lg:gap-16 justify-items-center">
         {
           // products.map(product => <Product product={product} key={product._id}/>)

@@ -109,7 +109,7 @@ const Cart = () => {
               </span>
               <button
                 onClick={() => handleRemove(item.product._id)}
-                className="ml-4 px-2 py-1 bg-red-500 text-white rounded"
+                className="ml-4 px-2 py-1 bg-red-500 text-white rounded-full"
               >
                 Remove
               </button>

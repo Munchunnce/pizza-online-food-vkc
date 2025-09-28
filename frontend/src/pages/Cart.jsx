@@ -100,40 +100,54 @@ const Cart = () => {
 
         <div className="pizza-list">
           {Object.values(cart.items).map((item) => (
-            <div key={item.product._id} className="flex items-center my-8">
-              <img
-                className="w-24"
-                src={item.product.image}
-                alt={item.product.name}
-              />
-              <div className="flex-1 ml-4">
-                <h1>{item.product.name}</h1>
-                <span>{item.product.size}</span>
+            <div
+              key={item.product._id}
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between my-6 p-4 border rounded-lg shadow-sm"
+            >
+              {/* Left: Image + Name */}
+              <div className="flex flex-col sm:flex-row sm:items-center w-full sm:w-auto">
+                <img
+                  className="w-24 h-24 object-cover rounded mx-auto sm:mx-0"
+                  src={item.product.image}
+                  alt={item.product.name}
+                />
+                <div className="flex-1 sm:ml-4 text-center sm:text-left mt-3 sm:mt-0">
+                  <h1 className="font-semibold text-lg">{item.product.name}</h1>
+                  <span className="text-gray-600 text-sm">
+                    {item.product.size}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
+
+              {/* Middle: Quantity Controls */}
+              <div className="flex items-center justify-center mt-3 sm:mt-0 space-x-2">
                 <button
                   onClick={() => handleDecrease(item.product._id)}
-                  className="px-2 py-1 bg-gray-200 rounded"
+                  className="px-3 py-1 bg-gray-200 rounded-full cursor-pointer"
                 >
                   -
                 </button>
-                <span>{item.quantity} Pcs</span>
+                <span className="font-medium">{item.quantity} Pcs</span>
                 <button
                   onClick={() => handleIncrease(item.product)}
-                  className="px-2 py-1 bg-gray-200 rounded"
+                  className="px-3 py-1 bg-gray-200 rounded-full cursor-pointer"
                 >
                   +
                 </button>
               </div>
-              <span className="font-bold text-lg ml-4">
-                ₹ {item.product.price * item.quantity}
-              </span>
-              <button
-                onClick={() => handleRemove(item.product._id)}
-                className="ml-4 px-2 py-1 bg-red-500 text-white rounded-full cursor-pointer"
-              >
-                Remove
-              </button>
+
+              {/* Right: Price + Remove */}
+              <div className="flex flex-col sm:flex-row items-center sm:space-x-4 mt-3 sm:mt-0 text-center sm:text-left">
+                <span className="font-bold text-lg text-[#FE5F1E]">
+                  ₹ {item.product.price * item.quantity}
+                </span>
+                <button
+                  onClick={() => handleRemove(item.product._id)}
+                  className="mt-2 sm:mt-0 px-3 py-1 bg-red-500 hover:bg-red-600 text-white rounded-full cursor-pointer transition"
+                >
+                  Remove
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -141,50 +155,49 @@ const Cart = () => {
         <hr />
 
         {/* Phone & Address Form + Total Section */}
-<div className="flex flex-col md:flex-row md:justify-between md:items-start py-6 space-y-4 md:space-y-0 md:space-x-6">
-  {/* Left: Total Amount */}
-  <div className="text-left">
-    <span className="text-lg font-bold">Total Amount:</span>
-    <span className="amount text-2xl font-bold ml-2">
-      ₹ {totalPrice}
-    </span>
-  </div>
+        <div className="flex flex-col md:flex-row md:justify-between md:items-start py-6 space-y-4 md:space-y-0 md:space-x-6">
+          {/* Left: Total Amount */}
+          <div className="text-left">
+            <span className="text-lg font-bold">Total Amount:</span>
+            <span className="amount text-2xl font-bold ml-2">
+              ₹ {totalPrice}
+            </span>
+          </div>
 
-  {/* Right: Phone & Address */}
-  <div className="flex flex-col space-y-3 w-full md:w-64">
-    <input
-      type="text"
-      placeholder="Phone"
-      value={phone}
-      onChange={(e) => setPhone(e.target.value)}
-      className="border border-gray-400 px-3 py-1 rounded w-full"
-    />
-    <input
-      type="text"
-      placeholder="Address"
-      value={address}
-      onChange={(e) => setAddress(e.target.value)}
-      className="border border-gray-400 px-3 py-1 rounded w-full"
-    />
-  </div>
-</div>
+          {/* Right: Phone & Address */}
+          <div className="flex flex-col space-y-3 w-full md:w-64">
+            <input
+              type="text"
+              placeholder="Phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="border border-gray-400 px-3 py-1 rounded w-full"
+            />
+            <input
+              type="text"
+              placeholder="Address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="border border-gray-400 px-3 py-1 rounded w-full"
+            />
+          </div>
+        </div>
 
-{/* Buttons */}
-<div className="mt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
-  <button
-    onClick={handleClearCart}
-    className="border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white transition-colors duration-200 px-6 py-2 rounded-full font-bold cursor-pointer"
-  >
-    Clear Cart
-  </button>
-  <button
-    onClick={handleOrderNow}
-    className="px-6 py-2 rounded-full bg-[#FE5F1E] hover:bg-[#e64e10] text-white font-bold transition duration-300 cursor-pointer"
-  >
-    Order Now
-  </button>
-</div>
-
+        {/* Buttons */}
+        <div className="mt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
+          <button
+            onClick={handleClearCart}
+            className="border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white transition-colors duration-200 px-6 py-2 rounded-full font-bold cursor-pointer"
+          >
+            Clear Cart
+          </button>
+          <button
+            onClick={handleOrderNow}
+            className="px-6 py-2 rounded-full bg-[#FE5F1E] hover:bg-[#e64e10] text-white font-bold transition duration-300 cursor-pointer"
+          >
+            Order Now
+          </button>
+        </div>
       </div>
     </section>
   );

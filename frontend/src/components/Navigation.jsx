@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const items = useSelector((state) => state.cart);
+  const items = useSelector((state) => state.cart.totalItems);
 
   const cartStyle = {
     display: "flex",
@@ -60,7 +60,7 @@ const Navigation = () => {
               className="bg-[#FE5F1E] hover:bg-[#e64e10] inline-flex items-center justify-center"
               style={cartStyle}
             >
-              <span className="text-white">{items.length}</span>
+              <span className="text-white">{items}</span>
               <img className="ml-2" src="/images/cart.png" alt="cart-icon" />
             </div>
           </Link>

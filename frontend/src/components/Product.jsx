@@ -1,15 +1,15 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { add } from "../store/CartSlice";
+import { addToCart } from "../store/CartSlice";
 
 const Product = ({ product }) => {
   const dispatch = useDispatch();
 
   const handleAdd = (e, product) => {
     e.preventDefault();
-    dispatch(add(product))
-  }
+    dispatch(addToCart(product));
+  };
 
   return (
     <Link to={`/products/${product._id}`}>

@@ -7,7 +7,7 @@ const ProtectedRoute = ({ children }) => {
 
   // Agar accessToken nahi hai, login/register page pe redirect kar do
   if (!accessToken) {
-    return <Navigate to="/register" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   // Agar accessToken hai, route ko access do

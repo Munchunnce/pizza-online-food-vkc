@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../store/authSlice"; // logout action
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const items = useSelector((state) => state.cart.totalItems);
+  const { accessToken, user } = useSelector((state) => state.auth);
+  // Logout
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   const cartStyle = {
     display: "flex",
@@ -44,6 +51,8 @@ const Navigation = () => {
             Products
           </Link>
         </li>
+        {!accessToken ? (
+        <>
         <li className="py-2 md:py-0 text-center">
           <Link to="/register" className="hover:text-[#e64e10]">
             Register
@@ -54,6 +63,23 @@ const Navigation = () => {
             Login
           </Link>
         </li>
+        </>
+        ) : (
+          <>
+          {/* user name */}
+          <li className="py-2 md:py-0 text-center font-bold text-[#FE5F1E]">
+              Welcome, {user?.name}!
+            </li>
+          <li className="py-2 md:py-0 text-center">
+            <Link
+              onClick={handleLogout}
+              className="hover:text-[#e64e10]"
+            >
+              Logout
+            </Link>
+          </li>
+          </>
+        )}
         <li className="py-2 md:py-0 text-center">
           <Link to="/cart">
             <div

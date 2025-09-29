@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from 'react-router-dom';
+import { loginUser } from "../store/authSlice";
+
+
 
 const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
-  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,12 +23,12 @@ const Login = () => {
 
     // Basic validation
     if (!formData.email || !formData.password) {
-      setError("Both fields are required!");
       return;
     }
 
-    setError("");
-    console.log("Login Submitted:", formData);
+    dispatch(loginUser(formData)).then((res) => {
+      if (res.meta.requestStatus === "fulfilled") navigate("/");  // Home page
+    });
 
     // Yaha API call karni ho to fetch/axios ka use kar sakte ho
     // Example:
@@ -88,7 +93,7 @@ const Login = () => {
                 className="bg-[#FE5F1E] hover:bg-[#e64e10] rounded-full text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline"
                 type="submit"
               >
-                Log In
+                {loading ? "Logging in..." : "Log In"}
               </button>
               <Link
                 className="text-[#FE5F1E] hover:text-[#e64e10] inline-block align-baseline font-bold text-sm"

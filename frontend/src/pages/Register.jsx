@@ -1,14 +1,19 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { registerUser } from "../store/authSlice";
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { loading, error, accessToken } = useSelector((state) => state.auth);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
 
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,14 +22,16 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Example validation
+    // validation
     if (!formData.name || !formData.email || !formData.password) {
-      setError("All fields are required!");
       return;
     }
 
-    setError("");
-    console.log("Form Submitted:", formData);
+    dispatch(registerUser(formData)).then((res) => {
+      if (res.meta.requestStatus === "fulfilled") {
+        navigate("/"); // Register ke baad home pe bhej do
+      }
+    });
 
     // yaha API call karni ho to fetch/axios ka use kar sakte ho
   };
@@ -97,10 +104,11 @@ const Register = () => {
 
             <div className="flex items-center justify-between">
               <button
+                disabled={loading}
                 className="bg-[#FE5F1E] hover:bg-[#e64e10] rounded-full text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline cursor-pointer"
                 type="submit"
               >
-                Register
+                {loading ? "Registering..." : "Register"}
               </button>
               <Link
                 className="text-[#FE5F1E] hover:text-[#e64e10] inline-block align-baseline font-bold text-sm"

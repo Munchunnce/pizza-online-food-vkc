@@ -10,6 +10,7 @@ import ProductsPage from './pages/ProductsPage';
 import SingleProducts from './pages/SingleProducts';
 import store from './store/store';
 import Footer from './pages/Footer';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 function App() {
@@ -25,7 +26,9 @@ function App() {
               <Route path='/login' element={<Login/>}></Route>
               <Route path='/products' exact element={<ProductsPage/>}></Route>
               <Route path='/products/:_id' element={<SingleProducts/>}></Route>
-              <Route path='/cart' element={<Cart/>}></Route>
+              <Route path='/cart' element={<ProtectedRoute>
+                <Cart/>
+              </ProtectedRoute>}></Route>
             </Routes>
           </div>
           <Footer/>

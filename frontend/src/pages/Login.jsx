@@ -93,7 +93,7 @@ const Login = () => {
 
             <div className="flex items-center justify-between">
               <button
-                className="bg-[#FE5F1E] hover:bg-[#e64e10] rounded-full text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline"
+                className="bg-[#FE5F1E] hover:bg-[#e64e10] rounded-full text-white font-bold py-2 px-4 focus:outline-none focus:shadow-outline cursor-pointer"
                 type="submit"
               >
                 {loading ? "Logging in..." : "Log In"}

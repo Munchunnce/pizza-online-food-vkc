@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
-import { loginUser } from "../store/authSlice";
+import { fetchCurrentUser, loginUser } from "../store/authSlice";
 
 
 
@@ -27,7 +27,10 @@ const Login = () => {
     }
 
     dispatch(loginUser(formData)).then((res) => {
-      if (res.meta.requestStatus === "fulfilled") navigate("/");  // Home page
+      if (res.meta.requestStatus === "fulfilled") {
+        dispatch(fetchCurrentUser()); // user name add
+        navigate("/");  // Home page
+      } 
     });
 
     // Yaha API call karni ho to fetch/axios ka use kar sakte ho

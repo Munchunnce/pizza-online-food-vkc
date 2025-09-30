@@ -163,33 +163,55 @@ const Cart = () => {
         <hr />
 
         {/* Phone & Address Form + Total Section */}
-        <div className="flex flex-col md:flex-row md:justify-between md:items-start py-6 space-y-4 md:space-y-0 md:space-x-6">
-          {/* Left: Total Amount */}
-          <div className="text-left">
-            <span className="text-lg font-bold">Total Amount:</span>
-            <span className="amount text-2xl font-bold ml-2">
-              ₹ {totalPrice}
-            </span>
-          </div>
+        <div className="flex justify-end py-6">
+  <div className="flex flex-col space-y-4 w-full md:w-1/3">
+    {/* Total Amount */}
+    <div className="text-left">
+      <span className="text-lg font-bold">Total Amount:</span>
+      <span className="amount text-2xl font-bold ml-2">
+        ₹ {totalPrice}
+      </span>
+    </div>
 
-          {/* Right: Phone & Address */}
-          <div className="flex flex-col space-y-3 w-full md:w-64">
-            <input
-              type="text"
-              placeholder="Phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              className="border border-gray-400 px-3 py-1 rounded w-full"
-            />
-            <input
-              type="text"
-              placeholder="Address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="border border-gray-400 px-3 py-1 rounded w-full"
-            />
-          </div>
-        </div>
+    {/* Payment Type */}
+    <div className="relative w-full">
+      <select
+        id="paymentType"
+        name="paymentType"
+        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
+      >
+        <option value="cod">Cash on delivery</option>
+        <option value="card">Pay with card</option>
+      </select>
+      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+        <svg
+          className="fill-current h-4 w-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
+          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+        </svg>
+      </div>
+    </div>
+
+    {/* Phone & Address */}
+    <input
+      type="text"
+      placeholder="Phone"
+      value={phone}
+      onChange={(e) => setPhone(e.target.value)}
+      className="border border-gray-400 px-3 py-1 rounded w-full"
+    />
+    <input
+      type="text"
+      placeholder="Address"
+      value={address}
+      onChange={(e) => setAddress(e.target.value)}
+      className="border border-gray-400 px-3 py-1 rounded w-full"
+    />
+  </div>
+</div>
+
 
         {/* Buttons */}
         <div className="mt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">

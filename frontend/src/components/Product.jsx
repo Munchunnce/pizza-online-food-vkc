@@ -2,14 +2,18 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToCart } from "../store/CartSlice";
+import Toast from './Toast/Toast';
 
 const Product = ({ product }) => {
   const dispatch = useDispatch();
   const [isAdding, setIsAdding ] = useState(false);
+  const [toast, setToast] = useState(null); //  Toast info
 
   const handleAdd = (e, product) => {
     e.preventDefault();
     dispatch(addToCart(product));
+    // Show toast with product name
+    setToast({ message: `🛒 added to cart!`, type: 'success' });
     setIsAdding(true);
     setTimeout(() => {
       setIsAdding(false);
@@ -18,6 +22,16 @@ const Product = ({ product }) => {
   };
 
   return (
+    <>
+      {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(null)}
+          />
+        )
+
+        }
     <Link to={`/products/${product._id}`}>
       <div className="bg-white shadow-md rounded-xl p-4 hover:shadow-lg transition duration-300 flex flex-col">
         {/* Product Image */}
@@ -46,12 +60,14 @@ const Product = ({ product }) => {
             ₹ {product.price}
           </span>
           <button onClick={(e) => handleAdd(e, product)}
-           className={`${isAdding ? 'bg-green-500 hover:bg-green-500 text-white' : 'bg-white'} border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white py-1 px-3 sm:px-5 rounded-full font-bold cursor-pointer transition-colors duration-200 flex items-center`}>
+            disabled={isAdding}
+            className={`${isAdding ? 'bg-green-500 hover:bg-green-500 text-white' : 'bg-white'} border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white py-1 px-3 sm:px-5 rounded-full font-bold cursor-pointer transition-colors duration-200 flex items-center`}>
             <span className="mr-2 text-lg">+</span> ADD{isAdding ? 'ED' : '' }
           </button>
         </div>
       </div>
     </Link>
+  </>  
   );
 };
 

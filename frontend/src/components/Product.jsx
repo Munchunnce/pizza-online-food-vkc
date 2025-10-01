@@ -1,14 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { addToCart } from "../store/CartSlice";
 
 const Product = ({ product }) => {
   const dispatch = useDispatch();
+  const [isAdding, setIsAdding ] = useState(false);
 
   const handleAdd = (e, product) => {
     e.preventDefault();
     dispatch(addToCart(product));
+    setIsAdding(true);
+    setTimeout(() => {
+      setIsAdding(false);
+    }, 1000);
+
   };
 
   return (
@@ -39,8 +45,9 @@ const Product = ({ product }) => {
           <span className="font-bold text-sm sm:text-base md:text-lg">
             ₹ {product.price}
           </span>
-          <button onClick={(e) => handleAdd(e, product)} className="bg-white border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white py-1 px-3 sm:px-5 rounded-full font-bold cursor-pointer transition-colors duration-200 flex items-center">
-            <span className="mr-2 text-lg">+</span> ADD
+          <button onClick={(e) => handleAdd(e, product)}
+           className={`${isAdding ? 'bg-green-500 hover:bg-green-500 text-white' : 'bg-white'} border border-[#FE5F1E] text-[#FE5F1E] hover:bg-[#FE5F1E] hover:text-white py-1 px-3 sm:px-5 rounded-full font-bold cursor-pointer transition-colors duration-200 flex items-center`}>
+            <span className="mr-2 text-lg">+</span> ADD{isAdding ? 'ED' : '' }
           </button>
         </div>
       </div>

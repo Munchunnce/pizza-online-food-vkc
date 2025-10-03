@@ -34,6 +34,7 @@ const Navigation = () => {
       >
         ☰
       </button>
+      
       {/* Links */}
       <ul
         className={`md:flex items-center md:space-x-6 absolute md:static bg-[#F8F8F8] left-0 w-full md:w-auto transition-all duration-300 ease-in-out ${

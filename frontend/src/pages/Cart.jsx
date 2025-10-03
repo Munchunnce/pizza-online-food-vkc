@@ -14,6 +14,12 @@ const Cart = () => {
   // User info for order
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [paymentType, setPaymentType] = useState("cod");
+
+  const totalPrice = Object.values(cart.items).reduce(
+    (acc, item) => acc + item.product.price * item.quantity,
+    0
+  );
 
   const handleIncrease = (product) => {
     dispatch(addToCart(product));
@@ -35,7 +41,8 @@ const Cart = () => {
   };
 
   // ✅ Order Now handler with address & phone
-  const handleOrderNow = () => {
+  const handleOrderNow = async () => {
+    // Validation
     if (cart.totalItems === 0) {
       alert("Cart is empty!");
       return;
@@ -45,30 +52,56 @@ const Cart = () => {
       return;
     }
 
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      alert("Please login first to place an order!");
+      return;
+    }
+
+
     // Here you can also send order data to backend API
     const orderData = {
       items: cart.items,
       totalItems: cart.totalItems,
-      totalPrice: Object.values(cart.items).reduce(
-        (acc, item) => acc + item.product.price * item.quantity,
-        0
-      ),
+      totalPrice,
       phone,
       address,
+      paymentType,
     };
 
-    console.log("Order Placed:", orderData); // Backend API call placeholder
+    try {
+    const res = await fetch("/api/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(orderData),
+    });
 
-    alert("🎉 Order placed successfully!");
-    dispatch(clearCart());
-    setPhone("");
-    setAddress("");
-  };
+    const data = await res.json();
+    if (res.ok) {
+      alert("🎉 Order placed successfully!");
+      dispatch(clearCart());
+      setPhone("");
+      setAddress("");
+    } else {
+      alert(data.message || "Order failed");
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong!");
+  }
+};
 
-  const totalPrice = Object.values(cart.items).reduce(
-    (acc, item) => acc + item.product.price * item.quantity,
-    0
-  );
+    // console.log("Order Placed:", orderData); // Backend API call placeholder
+
+    // alert("🎉 Order placed successfully!");
+    // dispatch(clearCart());
+    // setPhone("");
+    // setAddress("");
+
+  
 
   if (!cart.totalItems) {
     return (
@@ -178,6 +211,8 @@ const Cart = () => {
       <select
         id="paymentType"
         name="paymentType"
+        value={ paymentType }
+        onChange={(e) => setPaymentType(e.target.value)} 
         className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
       >
         <option value="cod">Cash on delivery</option>

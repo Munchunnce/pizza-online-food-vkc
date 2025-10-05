@@ -13,6 +13,7 @@ import Footer from "./pages/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { fetchCurrentUser } from "./store/authSlice";
 import { useEffect } from "react";
+import Orders from "./pages/Orders";
 
 // Yeh component refresh hone ke baad user ko dobara Redux me laayega
 const AppContent = () => {
@@ -40,6 +41,14 @@ const AppContent = () => {
             element={
               <ProtectedRoute>
                 <Cart />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/customer/orders"
+            element={
+              <ProtectedRoute>
+                <Orders />
               </ProtectedRoute>
             }
           ></Route>

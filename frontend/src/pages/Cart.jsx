@@ -6,7 +6,7 @@ import {
   removeFromCart,
   clearCart,
 } from "../store/CartSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -40,6 +40,7 @@ const Cart = () => {
     dispatch(clearCart());
   };
 
+  const navigate = useNavigate();
   // ✅ Order Now handler with address & phone
   const handleOrderNow = async () => {
     // Validation
@@ -85,6 +86,7 @@ const Cart = () => {
       dispatch(clearCart());
       setPhone("");
       setAddress("");
+      navigate('/customer/orders');
     } else {
       alert(data.message || "Order failed");
     }

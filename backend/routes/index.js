@@ -21,7 +21,7 @@ router.get('/products/:id', productController.show);
 
 // Orders
 router.post("/orders", auth, orderController.store);  // customer order karega
-router.get("/orders", auth, orderController.index);   // apne hi orders dekhega
+router.get("/customer/orders", auth, orderController.index);   // apne hi orders dekhega
 router.get("/admin/orders", [auth, admin], orderController.allOrders); // admin sab orders dekhega
 
 

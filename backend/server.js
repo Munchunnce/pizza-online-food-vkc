@@ -3,6 +3,7 @@ import { APP_PORT, MONGO_CONNECTION_URL } from './config/index.js';
 import errorhandler from './middlewares/errorHandler.js';
 const app = express();
 import routes from './routes/index.js';
+import adminRoutes from './routes/index.js'
 import mongoose from 'mongoose';
 import path from 'path';
 import { fileURLToPath } from "url";   // ⬅️ Add this
@@ -27,6 +28,7 @@ global.appRoot = path.resolve(__dirname);
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use('/api', routes);
+app.use('/app', adminRoutes);
 app.use('/uploads', express.static('uploads'));
 app.use(errorhandler);
 

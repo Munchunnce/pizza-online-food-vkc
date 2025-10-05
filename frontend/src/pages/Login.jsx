@@ -18,31 +18,34 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // Basic validation
     if (!formData.email || !formData.password) {
       return;
     }
+    const res = await dispatch(loginUser(formData));
 
-    dispatch(loginUser(formData)).then((res) => {
-      if (res.meta.requestStatus === "fulfilled") {
-        dispatch(fetchCurrentUser()); // user name add
-        navigate("/");  // Home page
-      } 
-    });
+    if (res.meta.requestStatus === "fulfilled") {
+      const userRole = res.payload?.role;
 
-    // Yaha API call karni ho to fetch/axios ka use kar sakte ho
-    // Example:
-    // fetch("/login", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify(formData),
-    // })
-    //   .then((res) => res.json())
-    //   .then((data) => console.log(data))
-    //   .catch((err) => setError("Something went wrong!"));
+      if (userRole === "admin") {
+        navigate("/admin/orders"); // ✅ Admin redirect
+      } else {
+        navigate("/"); // ✅ Customer redirect
+      }
+    }
+
+
+    // dispatch(loginUser(formData)).then((res) => {
+    //   if (res.meta.requestStatus === "fulfilled") {
+    //     dispatch(fetchCurrentUser()); // user name add
+    //     navigate("/");  // Home page
+    //   } 
+    // });
+
+
   };
 
   return (

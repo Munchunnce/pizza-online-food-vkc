@@ -5,6 +5,8 @@ import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import AdminRoute from "./components/AdminRoute";
+import AdminOrders from "./pages/AdminOrders";
 import Cart from "./pages/Cart";
 import ProductsPage from "./pages/ProductsPage";
 import SingleProducts from "./pages/SingleProducts";
@@ -15,12 +17,13 @@ import { fetchCurrentUser } from "./store/authSlice";
 import { useEffect } from "react";
 import Orders from "./pages/Orders";
 
+
 // Yeh component refresh hone ke baad user ko dobara Redux me laayega
 const AppContent = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token"); // wahi naam use karo jo storage me hai
+    const token = localStorage.getItem("access_token");
     if (token) {
       dispatch(fetchCurrentUser());
     }
@@ -52,6 +55,11 @@ const AppContent = () => {
               </ProtectedRoute>
             }
           ></Route>
+          <Route path="/admin/orders" element={
+            <AdminRoute>
+              <AdminOrders />
+            </AdminRoute>
+        } />
         </Routes>
       </div>
       <Footer />

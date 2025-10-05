@@ -7,7 +7,7 @@ const admin = async (req, res, next) => {
         if(user.role === 'admin'){
             next();
         } else {
-            return next(CustomErrorHandle.unAuthorized());
+            return next(CustomErrorHandle.unAuthorized('Only admins can access this route!'));
         }
     } catch (err) {
         return next(CustomErrorHandle.serverError());

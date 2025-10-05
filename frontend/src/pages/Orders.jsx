@@ -12,7 +12,7 @@ const Orders = () => {
   }, [dispatch]);
 
   return (
-    <section className="orders bg-gray-50 min-h-screen py-12">
+    <section className="bg-gray-50 min-h-screen py-12">
       <div className="container mx-auto px-4">
         <h1 className="font-bold text-lg mb-4">All Orders</h1>
 

@@ -1,5 +1,5 @@
 import express from 'express'
-import { registerController, loginController, userController, refreshController, productController, orderController } from '../controllers/index.js';
+import { registerController, loginController, userController, refreshController, productController, orderController, adminOrderController } from '../controllers/index.js';
 import auth from '../middlewares/auth.js';
 import admin from '../middlewares/admin.js';
 
@@ -19,10 +19,14 @@ router.delete('/products/:id',[auth, admin], productController.destroy);
 router.get('/products', productController.index);
 router.get('/products/:id', productController.show);
 
-// Orders
+// Customer route Orders
 router.post("/orders", auth, orderController.store);  // customer order karega
 router.get("/customer/orders", auth, orderController.index);   // apne hi orders dekhega
-router.get("/admin/orders", [auth, admin], orderController.allOrders); // admin sab orders dekhega
+
+// Admin route
+router.get("/admin/orders", [auth, admin], adminOrderController.index); // admin sab orders dekhega
+// Update order status
+router.put('/admin/orders/:id/status', auth, admin, adminOrderController.updateStatus);
 
 
 

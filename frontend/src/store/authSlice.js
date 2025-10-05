@@ -161,6 +161,7 @@ const authSlice = createSlice({
         state.refreshToken = action.payload.refresh_token;
         state.user = {
           name: action.payload.name,  // user name store
+          role: action.payload.role,
         };
       })
       .addCase(loginUser.rejected, (state, action) => {
@@ -195,7 +196,11 @@ const authSlice = createSlice({
       })
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = { name: action.payload.name }; // sirf name store karo
+        state.user = { 
+          name: action.payload.name, // sirf name store karo
+          role: action.payload.role,
+         };
+        localStorage.setItem("user", JSON.stringify(state.user)); 
       })
       .addCase(fetchCurrentUser.rejected, (state, action) => {
         state.loading = false;

@@ -33,7 +33,7 @@ const Login = () => {
       if (userRole === "admin") {
         navigate("/admin/orders"); // ✅ Admin redirect
       } else {
-        navigate("/"); // ✅ Customer redirect
+        navigate("/customer/orders"); // ✅ Customer redirect
       }
     }
 

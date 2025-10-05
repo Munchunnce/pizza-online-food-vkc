@@ -34,7 +34,7 @@ export const updateOrderStatus = createAsyncThunk(
   async ({ id, status }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("access_token");
-      const res = await fetch(`http://localhost:5000/api/admin/orders/${id}/status`, {
+      const res = await fetch(`/api/admin/orders/${id}/status`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -79,6 +79,10 @@ const adminOrdersSlice = createSlice({
       .addCase(fetchAdminOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+      })
+      .addCase(updateOrderStatus.pending, (state) => {
+      state.loading = true;
+      state.error = null;
       })
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
         const idx = state.orders.findIndex((o) => o._id === action.payload._id);

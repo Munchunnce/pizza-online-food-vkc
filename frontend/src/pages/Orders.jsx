@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "../store/ordersSlice";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -34,7 +35,7 @@ const Orders = () => {
                 orders.map((order) => (
                   <tr key={order._id} className="border-b hover:bg-gray-50">
                     <td className="border px-4 py-2 text-blue-600">
-                      <a href={`/customer/orders/${order._id}`}>{order._id}</a>
+                      <Link to={`/customer/orders/${order._id}`}>{order._id}</Link>
                     </td>
                     <td className="border px-4 py-2">{order.phone}</td>
                     <td className="border px-4 py-2">{order.address}</td>

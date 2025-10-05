@@ -19,7 +19,7 @@ const AdminOrders = () => {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <section className="p-6 bg-gray-50 min-h-screen">
+    <section className="p-6 mt-10 bg-gray-50 min-h-screen">
       <div className="container mx-auto">
         <h2 className="text-2xl font-bold mb-6">Admin Orders</h2>
 

@@ -22,6 +22,7 @@ router.get('/products/:id', productController.show);
 // Customer route Orders
 router.post("/orders", auth, orderController.store);  // customer order karega
 router.get("/customer/orders", auth, orderController.index);   // apne hi orders dekhega
+router.get("/customer/orders/:id", auth, orderController.show); // Customer route: single order
 
 // Admin route
 router.get("/admin/orders", [auth, admin], adminOrderController.index); // admin sab orders dekhega

@@ -16,6 +16,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { fetchCurrentUser } from "./store/authSlice";
 import { useEffect } from "react";
 import Orders from "./pages/Orders";
+import SingleOrder from "./pages/SingleOrder";
 
 
 // Yeh component refresh hone ke baad user ko dobara Redux me laayega
@@ -52,6 +53,14 @@ const AppContent = () => {
             element={
               <ProtectedRoute>
                 <Orders />
+              </ProtectedRoute>
+            }
+          ></Route>
+          <Route
+            path="/customer/orders/:id"
+            element={
+              <ProtectedRoute>
+                <SingleOrder />
               </ProtectedRoute>
             }
           ></Route>

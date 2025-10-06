@@ -47,15 +47,23 @@ const orderController = {
     }
   },
 
-  // Admin: sab orders fetch karne ke liye
-  async allOrders(req, res) {
-    try {
-      const orders = await Order.find().sort({ createdAt: -1 });
-      return res.json(orders);
-    } catch (err) {
-      return res.status(500).json({ message: "Error fetching all orders" });
+  async show(req, res) {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    // Authorize
+    if (req.user._id.toString() !== order.customerId.toString()) {
+      return res.status(403).json({ message: "Unauthorized access" });
     }
-  },
+
+    return res.json(order); // JSON response for React
+  } catch (err) {
+    console.error("Fetch single order error:", err);
+    return res.status(500).json({ message: "Something went wrong" });
+  }
+}
+
 };
 
 export default orderController;

@@ -24,7 +24,7 @@ const SingleOrder = () => {
     const fetchOrder = async () => {
       try {
         const token = localStorage.getItem("access_token");
-        const res = await fetch(`/api/customer/orders/${id}`, {
+        const res = await fetch(`https://pizza-online-food-vkc-server.vercel.app/api/customer/orders/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

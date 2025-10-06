@@ -7,7 +7,7 @@ export const fetchOrders = createAsyncThunk(
     try {
       const token = localStorage.getItem("access_token");
 
-      const response = await fetch("/api/customer/orders", {
+      const response = await fetch("https://pizza-online-food-vkc-server.vercel.app/api/customer/orders", {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

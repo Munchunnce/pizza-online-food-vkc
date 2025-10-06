@@ -5,7 +5,7 @@ export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await fetch("/api/register", {
+      const res = await fetch("https://pizza-online-food-vkc-server.vercel.app/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -33,7 +33,7 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await fetch("/api/login", {
+      const res = await fetch("https://pizza-online-food-vkc-server.vercel.app/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -57,7 +57,7 @@ export const refreshToken = createAsyncThunk(
   "auth/refreshToken",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await fetch("/api/refresh", {
+      const res = await fetch("https://pizza-online-food-vkc-server.vercel.app/api/refresh", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -92,7 +92,7 @@ export const fetchCurrentUser = createAsyncThunk(
         if (refreshRes.error) return rejectWithValue("Unable to refresh token");
         access_token = refreshRes.payload.access_token;
       }
-      const res = await fetch("/api/me", {
+      const res = await fetch("https://pizza-online-food-vkc-server.vercel.app/api/me", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

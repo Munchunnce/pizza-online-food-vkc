@@ -127,21 +127,40 @@ const productController = {
 
     // get All products
     async index(req, res, next) {
-        let document;
-        // pagination mongoose-pagination
-        try {
-            document = await Product.find().select('-updatedAt -__v').sort({_id: -1});
-            // ✅ Add full URL before sending
-            const withFullUrls = products.map((item) => ({
-                ...item._doc,
-                image: `${BASE_URL}/${item.image}`,
-            }));
-            res.json(withFullUrls);
-        } catch (err) {
-            return next(CustomErrorHandle.serverError());
-        }
-        // res.json(document);
-    },
+  try {
+    const documents = await Product.find()
+      .select("-updatedAt -__v")
+      .sort({ _id: -1 });
+
+    // ✅ Add full URL before sending
+    const withFullUrls = documents.map((item) => ({
+      ...item._doc,
+      image: `${BASE_URL}/${item.image}`,
+    }));
+
+    res.json(withFullUrls);
+  } catch (err) {
+    console.error("Product fetch error:", err.message);
+    return next(CustomErrorHandle.serverError());
+  }
+},
+
+    // async index(req, res, next) {
+    //     let document;
+    //     // pagination mongoose-pagination
+    //     try {
+    //         document = await Product.find().select('-updatedAt -__v').sort({_id: -1});
+    //         // ✅ Add full URL before sending
+    //         const withFullUrls = products.map((item) => ({
+    //             ...item._doc,
+    //             image: `${BASE_URL}/${item.image}`,
+    //         }));
+    //         res.json(withFullUrls);
+    //     } catch (err) {
+    //         return next(CustomErrorHandle.serverError());
+    //     }
+    //     // res.json(document);
+    // },
 
     // get single product
     async show(req, res, next) {

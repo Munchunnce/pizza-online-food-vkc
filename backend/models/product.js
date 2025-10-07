@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { BASE_URL } from "../config/index.js";
+import { APP_URL } from "../config/index.js";
 
 const Schema = mongoose.Schema;
 
@@ -10,7 +10,7 @@ const productSchema = new Schema({
     image: { type: String, require: true, get: (image) => {
         // http://localhost:5000/uploads/1755529139439-209511301.15726292.png
         if (!image) return null;
-        return `${BASE_URL}/${image}`;
+        return `${APP_URL}/${image}`;
     } },
 }, { timestamps: true, toJSON: { getters: true }, id: false });
 

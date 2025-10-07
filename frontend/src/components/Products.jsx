@@ -8,12 +8,22 @@ const Products = () => {
   const [showFilters, setShowFilters] = useState(false); // toggle filter
 
   useEffect(() => {
-    fetch("https://pizza-online-food-vkc-server.vercel.app/api/products")
-      .then((res) => res.json())
-      .then((products) => {
+  fetch("https://pizza-online-food-vkc-server.vercel.app/api/products")
+    .then((res) => res.json())
+    .then((products) => {
+      if (Array.isArray(products)) {
         setProducts(products);
-      });
-  }, []);
+      } else {
+        console.error("Invalid response:", products);
+        setProducts([]); // fallback
+      }
+    })
+    .catch((err) => {
+      console.error("Fetch error:", err);
+      setProducts([]);
+    });
+}, []);
+
 
   // Filter logic
   let filteredProducts =

@@ -4,18 +4,22 @@ import path from 'path';
 import CustomErrorHandle from "../services/CustomErrorHandler.js";
 import fs from 'fs';
 import productSchema from "../validator/productValidator.js";
+import dotenv from "dotenv";
 
 
+dotenv.config();
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'uploads/'),
     filename: (req, file, cb) => {
-        const uniqueName = `${Date.now()}-${Math.random() * 1E9}${path.extname(file.originalname)}`;
+        const uniqueName = `${Date.now()}-${Math.random() * 1e9}${path.extname(file.originalname)}`;
         cb(null, uniqueName);
     }
 });
 
 const handlerMultipartData = multer({storage, limits: { fileSize: 1000000 * 5 } }).single('image');
 
+// ✅ Base URL (works both locally and on Vercel)
+const BASE_URL = process.env.BASE_URL || "http://localhost:5000";
 
 const productController = {
     async store(req, res, next) {
@@ -46,11 +50,16 @@ const productController = {
                     price,
                     size,
                     image: filePath
-                })
+                });
+                // ✅ Return full URL for frontend
+                res.status(201).json({
+                ...document._doc,
+                image: `${BASE_URL}/${document.image}`,
+                });
             } catch (err) {
                 return next(err);
             }
-            res.status(201).json(document);
+            // res.status(201).json(document);
         })
     },
 
@@ -88,11 +97,16 @@ const productController = {
                     price,
                     size,
                     ...(req.file && { image: filePath })
-                }, { new: true })
+                }, { new: true });
+
+                res.status(201).json({
+                ...document._doc,
+                image: `${BASE_URL}/${document.image}`,
+                });
             } catch (err) {
                 return next(err);
             }
-            res.status(201).json(document);
+            // res.status(201).json(document);
         })
     },
 
@@ -117,22 +131,43 @@ const productController = {
         // pagination mongoose-pagination
         try {
             document = await Product.find().select('-updatedAt -__v').sort({_id: -1});
+            // ✅ Add full URL before sending
+            const withFullUrls = products.map((item) => ({
+                ...item._doc,
+                image: `${BASE_URL}/${item.image}`,
+            }));
+            res.json(withFullUrls);
         } catch (err) {
             return next(CustomErrorHandle.serverError());
         }
-        res.json(document);
+        // res.json(document);
     },
 
     // get single product
     async show(req, res, next) {
-        let document;
-        try {
-            document = await Product.findOne({_id: req.params.id }).select('-updatedAt -__v');
-        } catch (err) {
-            return next(CustomErrorHandle.serverError());
-        }
-        res.json(document);
+    try {
+      const document = await Product.findById(req.params.id).select(
+        "-updatedAt -__v"
+      );
+      if (!document) return next(CustomErrorHandle.notFound());
+
+      res.json({
+        ...document._doc,
+        image: `${BASE_URL}/${document.image}`,
+      });
+    } catch (err) {
+      return next(CustomErrorHandle.serverError());
     }
+  },
+    // async show(req, res, next) {
+    //     let document;
+    //     try {
+    //         document = await Product.findOne({_id: req.params.id }).select('-updatedAt -__v');
+    //     } catch (err) {
+    //         return next(CustomErrorHandle.serverError());
+    //     }
+    //     res.json(document);
+    // }
 };
 
 

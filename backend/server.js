@@ -42,7 +42,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/api", routes);
 app.use("/app", adminRoutes);
-app.use("/uploads", express.static("uploads"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use(errorhandler);
 
 app.get("/", (req, res) => {

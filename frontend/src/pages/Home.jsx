@@ -13,7 +13,7 @@ const Home = () => {
               <span className="block text-[#FE5F1E] mt-1">Only 45 Minutes!</span>
             </h1>
 
-            <p className="text-base sm:text-lg md:text-xl mt-6 text-black max-w-md mx-auto md:mx-0 leading-snug">
+            <p className="text-base sm:text-lg md:text-xl mt-6 text-gray-800 font-medium tracking-wide leading-relaxed max-w-md mx-auto md:mx-0">
               Enjoy a Free Meal if Your Order Takes More Than 45 Minutes!
             </p>
 

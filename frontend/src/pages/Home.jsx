@@ -17,7 +17,7 @@ const Home = () => {
               Enjoy a Free Meal if Your Order Takes More Than 45 Minutes!
             </p>
 
-            <button className="px-6 sm:px-8 py-3 rounded-full text-base sm:text-lg text-white font-bold mt-8 bg-[#FE5F1E] hover:bg-[#e64e10] transition duration-300 shadow-md hover:shadow-lg">
+            <button className="px-6 sm:px-8 py-3 rounded-full text-base sm:text-lg text-white font-bold mt-8 bg-[#FE5F1E] hover:bg-[#e64e10] cursor-pointer transition duration-300 shadow-md hover:shadow-lg">
               Get your pizza now
             </button>
           </div>

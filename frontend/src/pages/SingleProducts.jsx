@@ -46,15 +46,17 @@ const SingleProducts = () => {
 
         {/* Product Card */}
         <div className="bg-[#F8F8F8] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col lg:flex-row items-center lg:items-start p-4 sm:p-6 w-full max-w-5xl mx-auto">
-          {/* Product Image */}
-          <img
-            src={product.image}
-            alt={product.name}
-            className="w-70 h-70 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-70 lg:h-70 object-cover rounded-lg mb-4 lg:mb-0"
-          />
+          {/* Product Image with hover zoom */}
+          <div className="overflow-hidden rounded-lg">
+            <img
+              src={product.image}
+              alt={product.name}
+              className="w-70 h-70 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-70 lg:h-70 object-cover transition-transform duration-500 ease-in-out transform hover:scale-105"
+            />
+          </div>
 
           {/* Product Info */}
-          <div className="lg:ml-8 flex flex-col justify-between text-center lg:text-left w-full lg:w-1/2">
+          <div className="lg:ml-8 flex flex-col justify-between text-center lg:text-left w-full lg:w-1/2 mt-4 lg:mt-0">
             <div>
               <h1 className="text-xl sm:text-2xl font-bold mb-2">
                 {product.name}

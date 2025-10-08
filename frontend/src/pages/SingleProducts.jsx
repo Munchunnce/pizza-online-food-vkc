@@ -45,24 +45,32 @@ const SingleProducts = () => {
         </div>
 
         {/* Product Card */}
-        <div className="bg-[#F8F8F8] rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col lg:flex-row items-center lg:items-start p-4 sm:p-6 w-full max-w-5xl mx-auto">
+        <div className="bg-[#F8F8F8] rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col lg:flex-row items-center lg:items-start p-4 sm:p-6 w-full max-w-5xl mx-auto">
           {/* Product Image with hover zoom */}
-          <div className="overflow-hidden rounded-lg">
+          <div className="overflow-hidden rounded-xl mb-6 lg:mb-0">
             <img
               src={product.image}
               alt={product.name}
-              className="w-70 h-70 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-70 lg:h-70 object-cover transition-transform duration-500 ease-in-out transform hover:scale-105"
+              className="
+          object-cover rounded-xl
+          transition-transform duration-500 ease-in-out transform hover:scale-105
+          w-[200px] h-[200px]       /* 📱 mobile */
+          sm:w-[260px] sm:h-[260px] /* 📲 small tablet */
+          md:w-[300px] md:h-[300px] /* 💻 medium screen */
+          lg:w-[400px] lg:h-[400px] /* 🖥️ large screen */
+          xl:w-[300px] xl:h-[300px] /* 🖥️ big desktop */
+        "
             />
           </div>
 
           {/* Product Info */}
-          <div className="lg:ml-8 flex flex-col justify-between text-center lg:text-left w-full lg:w-1/2 mt-4 lg:mt-0">
+          <div className="lg:ml-10 flex flex-col justify-between text-center lg:text-left w-full lg:w-1/2">
             <div>
-              <h1 className="text-xl sm:text-2xl font-bold mb-2">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-2">
                 {product.name}
               </h1>
-              <p className="text-gray-500 text-md mb-4">{product.size}</p>
-              <p className="font-bold text-lg sm:text-xl mb-6">
+              <p className="text-gray-500 text-md mb-3">{product.size}</p>
+              <p className="font-bold text-xl sm:text-2xl mb-6">
                 ₹ {product.price}
               </p>
             </div>

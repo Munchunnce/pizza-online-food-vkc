@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { io } from "socket.io-client";
+
+
+
+const socket = io("http://localhost:5000", { transports: ["websocket"] });
 
 // Line Awesome icons
 const statusSteps = [
@@ -33,14 +38,27 @@ const SingleOrder = () => {
         if (!res.ok) throw new Error("Failed to fetch order");
         const data = await res.json();
         setOrder(data);
+        // ✅ Join room
+        console.log("Joining room:", id);
+        socket.emit("join_room", id);
+        setLoading(false);
       } catch (err) {
         setError(err.message);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchOrder();
+
+    // ✅ Listen for realtime updates once
+  const handleOrderUpdate = (updatedOrder) => {
+    console.log("Realtime update received:", updatedOrder);
+    setOrder(updatedOrder);
+  };
+    socket.on("orderUpdated", handleOrderUpdate);
+
+    return () => {
+      socket.off("orderUpdated", handleOrderUpdate);
+    };
   }, [id]);
 
   if (loading) return <p>Loading...</p>;

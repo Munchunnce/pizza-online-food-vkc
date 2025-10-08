@@ -1,14 +1,40 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAdminOrders, updateOrderStatus } from "../store/admin/adminOrdersSlice";
+import { addOrder, fetchAdminOrders, updateOrderStatus } from "../store/admin/adminOrdersSlice";
 import moment from "moment";
+import { io } from "socket.io-client";
+
+
 
 const AdminOrders = () => {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector((state) => state.adminOrders);
 
+  const socket = useRef(null);
+
   useEffect(() => {
+    // Socket connection
+    socket.current = io("http://localhost:5000");
+
+    // Admin join orders room
+    socket.current.emit("join_orders_room");
+
+  // listen for new orders
+  socket.current.on("newOrder", (order) => {
+    dispatch(addOrder(order));
+    // dispatch({
+    //   type: "adminOrders/addOrder",
+    //   payload: order,
+    // });
+  });
+  // Fetch initial admin orders
     dispatch(fetchAdminOrders());
+
+  // cleanup
+  return () => {
+    socket.current.off("newOrder"); // event listener remove
+      socket.current.disconnect();    // socket disconnect
+  };
   }, [dispatch]);
 
   const handleStatusChange = (id, status) => {

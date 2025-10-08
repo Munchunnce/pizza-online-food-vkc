@@ -65,10 +65,16 @@ const adminOrdersSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  // ✅ Ye add karna hai (reducers section)
+  reducers: {
+    addOrder: (state, action) => {
+      // New order ko top par dikhaye (real-time)
+      state.orders.unshift(action.payload);
+    },
+  },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAdminOrders.pending, (state) => {
+      .addCase(fetchAdminOrders.pending, (state) => {   // Admin orders fetch karna
         state.loading = true;
         state.error = null;
       })
@@ -80,13 +86,18 @@ const adminOrdersSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+       // Admin order status update
       .addCase(updateOrderStatus.pending, (state) => {
-      state.loading = true;
+      // state.loading = true;
       state.error = null;
       })
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
-        const idx = state.orders.findIndex((o) => o._id === action.payload._id);
-        if (idx >= 0) state.orders[idx] = action.payload;
+        const updatedOrder = action.payload;
+        const index = state.orders.findIndex((o) => o._id === updatedOrder._id);
+        if (index !== -1) {
+          // ✅ Replace only that order in the array
+          state.orders[index] = updatedOrder;
+        }
       })
       .addCase(updateOrderStatus.rejected, (state, action) => {
         state.error = action.payload;
@@ -94,4 +105,5 @@ const adminOrdersSlice = createSlice({
   },
 });
 
+export const { addOrder } = adminOrdersSlice.actions;
 export default adminOrdersSlice.reducer;

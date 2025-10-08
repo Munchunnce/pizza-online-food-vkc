@@ -27,6 +27,11 @@ const orderController = {
 
       const savedOrder = await order.save();
 
+      // 🔔 Emit to admin dashboard in realtime
+      if (global.io) {
+        global.io.to("orders_room").emit("newOrder", savedOrder);
+      }
+
       return res.status(201).json({
         message: "Order placed successfully",
         order: savedOrder,

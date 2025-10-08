@@ -8,9 +8,9 @@ const Home = () => {
         <div className="container mx-auto flex flex-col md:flex-row items-center justify-between px-6 md:px-10">
           {/* LEFT SECTION */}
           <div className="w-full md:w-1/2 text-center md:text-left">
-            <h1 className="font-black font-sans leading-tight tracking-tight text-4xl sm:text-5xl md:text-6xl lg:text-5xl">
+            <h1 className="font-black font-sans leading-tight tracking-tight text-4xl sm:text-5xl md:text-[2.9rem] lg:text-[3.3rem]">
               <span className="block">Super Delicious Pizza in</span>
-              <span className="block text-[#FE5F1E] mt-2">Only 45 Minutes!</span>
+              <span className="block text-[#FE5F1E] mt-1">Only 45 Minutes!</span>
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl mt-6 text-black max-w-md mx-auto md:mx-0 leading-snug">

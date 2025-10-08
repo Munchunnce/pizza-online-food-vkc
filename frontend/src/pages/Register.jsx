@@ -38,7 +38,7 @@ const Register = () => {
 
   return (
     <div>
-      <section className="login flex justify-center pt-24">
+      <section className="login flex justify-center pt-15 container rounded bg-[#F8F8F8] mx-auto mt-4">
         <div className="w-full max-w-xs">
           <form
             onSubmit={handleSubmit}

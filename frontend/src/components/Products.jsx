@@ -35,7 +35,7 @@ const Products = () => {
   return (
     <div className="container bg-[#F8F8F8] mx-auto pb-24 px-4">
       <h1 className="text-xl sm:text-2xl md:text-3xl font-bold my-8 text-center md:text-left">
-        All Pizza
+        <em>All Pizza</em>
       </h1>
       {/* 🔥 Toggle Filter Button */}
       <div className="flex justify-end mb-4">

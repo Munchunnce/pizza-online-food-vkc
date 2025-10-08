@@ -14,7 +14,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const handlerMultipartData = multer({storage, limits: { fileSize: 1000000 * 15 } }).single('image');
+const handlerMultipartData = multer({storage, limits: { fileSize: 1000000 * 5 } }).single('image');
 
 
 const productController = {

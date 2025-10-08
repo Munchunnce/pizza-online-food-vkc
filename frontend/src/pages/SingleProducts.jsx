@@ -16,7 +16,7 @@ const handleAddToCart = () => {
 
 
     useEffect(() => {
-        fetch(`https://pizza-online-food-vkc-server.vercel.app/api/products/${params._id}`)
+        fetch(`/api/products/${params._id}`)
         .then(res => res.json())
         .then(product => {
             setProduct(product);

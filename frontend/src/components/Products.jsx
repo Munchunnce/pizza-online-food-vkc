@@ -8,7 +8,7 @@ const Products = () => {
   const [showFilters, setShowFilters] = useState(false); // toggle filter
 
   useEffect(() => {
-    fetch("https://pizza-online-food-vkc-server.vercel.app/api/products")
+    fetch("/api/products")
       .then((res) => res.json())
       .then((products) => {
         setProducts(products);

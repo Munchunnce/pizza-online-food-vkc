@@ -40,5 +40,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://pizza-online-food-vkc.vercel.app"
+  "proxy": "http://localhost:5000"
 }

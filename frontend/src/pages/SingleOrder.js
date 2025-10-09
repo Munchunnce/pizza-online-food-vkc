@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { io } from "socket.io-client";
+import Toast from "../components/Toast/Toast"
 
 
 
@@ -24,6 +25,7 @@ const SingleOrder = () => {
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [toast, setToast] = useState(null); // for notification
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -53,6 +55,7 @@ const SingleOrder = () => {
   const handleOrderUpdate = (updatedOrder) => {
     console.log("Realtime update received:", updatedOrder);
     setOrder(updatedOrder);
+    setToast(`Your order status changed to "${updatedOrder.status}"`); // show toast
   };
     socket.on("orderUpdated", handleOrderUpdate);
 
@@ -149,6 +152,14 @@ const SingleOrder = () => {
           </ul>
         </div>
       </div>
+       {/* ✅ Toast notification */}
+      {toast && (
+        <Toast
+          message={toast}
+          type="success"
+          onClose={() => setToast(null)}
+        />
+      )}
     </section>
   );
 };

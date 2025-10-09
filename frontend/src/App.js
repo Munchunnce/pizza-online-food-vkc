@@ -18,6 +18,13 @@ import { useEffect } from "react";
 import Orders from "./pages/Orders";
 import SingleOrder from "./pages/SingleOrder";
 
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+// ✅ Stripe public key
+const stripePromise = loadStripe(
+  "pk_test_51SDlgPRz3ObFp51Jl6MYMamJjAAtFf03juq4FEQCSQuq1l2lJPQvjktWk6YZETIxySNgc1fZyg18mhchrJLRXzO000K1k53Qp7"
+);
 
 // Yeh component refresh hone ke baad user ko dobara Redux me laayega
 const AppContent = () => {
@@ -81,7 +88,10 @@ function App() {
     <div className="App flex flex-col min-h-screen">
       <Provider store={store}>
         <BrowserRouter>
-          <AppContent />
+          {/* ✅ Stripe Elements wrapper here */}
+          <Elements stripe={stripePromise}>
+            <AppContent />
+          </Elements>
         </BrowserRouter>
       </Provider>
     </div>

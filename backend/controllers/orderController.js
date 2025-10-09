@@ -1,10 +1,14 @@
 // controllers/customer/orderController.js
 import { Order} from "../models/index.js";
+import Stripe from "stripe";
+
+
+const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 const orderController = {
   async store(req, res) {
     try {
-      const { items, totalItems, totalPrice, phone, address, paymentType } = req.body;
+      const { items, totalItems, totalPrice, phone, address, paymentType, stripeToken } = req.body;
 
       // validation
       if (!items || !totalItems || !totalPrice || !phone || !address) {
@@ -14,6 +18,23 @@ const orderController = {
       // customerId backend se (req.user se)
       const customerId = req.user._id;
 
+      // 🧾 STEP 1: If paymentType is CARD, charge via Stripe
+      let paymentStatus = false;
+      let paymentResponse = null;
+
+      if (paymentType === "card" && stripeToken) {
+        paymentResponse = await stripe.charges.create({
+          amount: Math.round(totalPrice * 100), // convert to paise
+          currency: "inr",
+          source: stripeToken,
+          description: `Pizza order by user ${customerId}`,
+        });
+
+        if (paymentResponse.status === "succeeded") {
+          paymentStatus = true;
+        }
+      }
+
       const order = new Order({
         customerId,
         items,
@@ -22,7 +43,7 @@ const orderController = {
         phone,
         address,
         paymentType,
-        paymentStatus: paymentType === "cod" ? false : true,
+        paymentStatus,
       });
 
       const savedOrder = await order.save();
@@ -33,13 +54,22 @@ const orderController = {
         global.io.to("orders_room").emit("newOrder", populatedOrder);
       }
 
+      // ✅ STEP 4: Response to Frontend
       return res.status(201).json({
-        message: "Order placed successfully",
+        message:
+          paymentType === "card"
+            ? paymentStatus
+              ? "Payment Successful & Order placed"
+              : "Payment failed"
+            : "Order placed successfully (COD)",
         order: populatedOrder,
+        payment: paymentResponse,
       });
     } catch (error) {
-      console.error("Order Save Error:", error);
-      return res.status(500).json({ message: "Something went wrong" });
+      console.error("Stripe/Order Error:", error);
+      return res.status(500).json({
+        message: "Something went wrong during payment or order creation",
+      });
     }
   },
 

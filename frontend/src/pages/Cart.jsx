@@ -59,7 +59,6 @@ const Cart = () => {
       return;
     }
 
-
     // Here you can also send order data to backend API
     const orderData = {
       items: cart.items,
@@ -71,39 +70,37 @@ const Cart = () => {
     };
 
     try {
-    const res = await fetch("/api/orders", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(orderData),
-    });
+      const res = await fetch("/api/orders", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderData),
+      });
 
-    const data = await res.json();
-    if (res.ok) {
-      alert("🎉 Order placed successfully!");
-      dispatch(clearCart());
-      setPhone("");
-      setAddress("");
-      navigate('/customer/orders');
-    } else {
-      alert(data.message || "Order failed");
+      const data = await res.json();
+      if (res.ok) {
+        alert("🎉 Order placed successfully!");
+        dispatch(clearCart());
+        setPhone("");
+        setAddress("");
+        navigate("/customer/orders");
+      } else {
+        alert(data.message || "Order failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong!");
     }
-  } catch (err) {
-    console.error(err);
-    alert("Something went wrong!");
-  }
-};
+  };
 
-    // console.log("Order Placed:", orderData); // Backend API call placeholder
+  // console.log("Order Placed:", orderData); // Backend API call placeholder
 
-    // alert("🎉 Order placed successfully!");
-    // dispatch(clearCart());
-    // setPhone("");
-    // setAddress("");
-
-  
+  // alert("🎉 Order placed successfully!");
+  // dispatch(clearCart());
+  // setPhone("");
+  // setAddress("");
 
   if (!cart.totalItems) {
     return (
@@ -163,9 +160,10 @@ const Cart = () => {
                   onClick={() => handleDecrease(item.product._id)}
                   disabled={item.quantity === 1}
                   className={`px-3 py-1 rounded-full cursor-pointer 
-                    ${item.quantity === 1
-                      ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                      : "bg-gray-200 hover:bg-gray-300"
+                    ${
+                      item.quantity === 1
+                        ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        : "bg-gray-200 hover:bg-gray-300"
                     }`}
                 >
                   -
@@ -199,56 +197,55 @@ const Cart = () => {
 
         {/* Phone & Address Form + Total Section */}
         <div className="flex justify-end py-6">
-  <div className="flex flex-col space-y-4 w-full md:w-1/3">
-    {/* Total Amount */}
-    <div className="text-left">
-      <span className="text-lg font-bold">Total Amount:</span>
-      <span className="amount text-2xl font-bold ml-2">
-        ₹ {totalPrice}
-      </span>
-    </div>
+          <div className="flex flex-col space-y-4 w-full md:w-1/3">
+            {/* Total Amount */}
+            <div className="text-left">
+              <span className="text-lg font-bold">Total Amount:</span>
+              <span className="amount text-2xl font-bold ml-2">
+                ₹ {totalPrice}
+              </span>
+            </div>
 
-    {/* Payment Type */}
-    <div className="relative w-full">
-      <select
-        id="paymentType"
-        name="paymentType"
-        value={ paymentType }
-        onChange={(e) => setPaymentType(e.target.value)} 
-        className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
-      >
-        <option value="cod">Cash on delivery</option>
-        <option value="card">Pay with card</option>
-      </select>
-      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-        <svg
-          className="fill-current h-4 w-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-        >
-          <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-        </svg>
-      </div>
-    </div>
+            {/* Payment Type */}
+            <div className="relative w-full">
+              <select
+                id="paymentType"
+                name="paymentType"
+                value={paymentType}
+                onChange={(e) => setPaymentType(e.target.value)}
+                className="block appearance-none w-full bg-white border border-gray-400 hover:border-gray-500 px-4 py-2 pr-8 rounded leading-tight focus:outline-none focus:shadow-outline"
+              >
+                <option value="cod">Cash on delivery</option>
+                <option value="card">Pay with card</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <svg
+                  className="fill-current h-4 w-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
+                </svg>
+              </div>
+            </div>
 
-    {/* Phone & Address */}
-    <input
-      type="text"
-      placeholder="Phone"
-      value={phone}
-      onChange={(e) => setPhone(e.target.value)}
-      className="border border-gray-400 px-3 py-1 rounded w-full"
-    />
-    <input
-      type="text"
-      placeholder="Address"
-      value={address}
-      onChange={(e) => setAddress(e.target.value)}
-      className="border border-gray-400 px-3 py-1 rounded w-full"
-    />
-  </div>
-</div>
-
+            {/* Phone & Address */}
+            <input
+              type="text"
+              placeholder="Phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              className="border border-gray-400 px-3 py-1 rounded w-full"
+            />
+            <input
+              type="text"
+              placeholder="Address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="border border-gray-400 px-3 py-1 rounded w-full"
+            />
+          </div>
+        </div>
 
         {/* Buttons */}
         <div className="mt-6 flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">

@@ -26,15 +26,16 @@ const orderController = {
       });
 
       const savedOrder = await order.save();
-
+      // ✅ populate customer details for real-time admin notification
+      const populatedOrder = await savedOrder.populate("customerId");
       // 🔔 Emit to admin dashboard in realtime
       if (global.io) {
-        global.io.to("orders_room").emit("newOrder", savedOrder);
+        global.io.to("orders_room").emit("newOrder", populatedOrder);
       }
 
       return res.status(201).json({
         message: "Order placed successfully",
-        order: savedOrder,
+        order: populatedOrder,
       });
     } catch (error) {
       console.error("Order Save Error:", error);

@@ -1,14 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addOrder, fetchAdminOrders, updateOrderStatus } from "../store/admin/adminOrdersSlice";
 import moment from "moment";
 import { io } from "socket.io-client";
+import Toast from "../components/Toast/Toast"; // ✅ import Toast
 
 
 
 const AdminOrders = () => {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector((state) => state.adminOrders);
+  const [toast, setToast] = useState(null); // ✅ toast state
 
   const socket = useRef(null);
 
@@ -22,6 +24,8 @@ const AdminOrders = () => {
   // listen for new orders
   socket.current.on("newOrder", (order) => {
     dispatch(addOrder(order));
+    // ✅ Show toast notification
+      setToast(`🛒 New order received from ${order.customerId?.name || "Unknown"}`);
     // dispatch({
     //   type: "adminOrders/addOrder",
     //   payload: order,
@@ -105,6 +109,14 @@ const AdminOrders = () => {
           </div>
         )}
       </div>
+      {/* ✅ Toast notification */}
+      {toast && (
+        <Toast
+          message={toast}
+          type="success"
+          onClose={() => setToast(null)}
+        />
+      )}
     </section>
   );
 };

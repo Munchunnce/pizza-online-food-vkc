@@ -37,31 +37,31 @@ const AppContent = () => {
     const storedAccessToken = localStorage.getItem("access_token");
     const storedRefreshToken = localStorage.getItem("refresh_token");
     if (storedAccessToken && storedRefreshToken) {
-      dispatch(
-        restoreTokens({
-          accessToken: storedAccessToken,
-          refreshToken: storedRefreshToken,
-        })
-      );
+      dispatch({
+        type: "auth/restoreTokens",
+        payload: { accessToken: storedAccessToken, refreshToken: storedRefreshToken },
+      });
+      // Fetch user after restoring tokens
+      dispatch(fetchCurrentUser());
     }
   }, [dispatch]);
 
-  // Fetch user on load
-  useEffect(() => {
-    const fetchUser = async () => {
-      if (!accessToken && savedRefreshToken) {
-        const refreshRes = await dispatch(refreshToken());
-        if (refreshRes.meta.requestStatus === "fulfilled") {
-          await dispatch(fetchCurrentUser());
-        } else {
-          dispatch({ type: "auth/logout" });
-        }
-      } else if (accessToken) {
-        await dispatch(fetchCurrentUser());
-      }
-    };
-    fetchUser();
-  }, [dispatch, accessToken, savedRefreshToken]);
+  // Fetch user on load Auto refresh token
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     if (!accessToken && savedRefreshToken) {
+  //       const refreshRes = await dispatch(refreshToken());
+  //       if (refreshRes.meta.requestStatus === "fulfilled") {
+  //         await dispatch(fetchCurrentUser());
+  //       } else {
+  //         dispatch({ type: "auth/logout" });
+  //       }
+  //     } else if (accessToken) {
+  //       await dispatch(fetchCurrentUser());
+  //     }
+  //   };
+  //   fetchUser();
+  // }, [dispatch, accessToken, savedRefreshToken]);
 
   // Auto refresh token
   useEffect(() => {

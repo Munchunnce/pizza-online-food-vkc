@@ -41,7 +41,7 @@ const Products = () => {
       <div className="flex justify-end mb-4">
         <button
           onClick={() => setShowFilters(!showFilters)}
-          className="bg-[#FE5F1E] text-white px-4 py-2 rounded-full font-semibold hover:bg-[#e64e10] transition duration-300"
+          className="bg-[#FE5F1E] text-white px-4 py-2 rounded-full font-semibold hover:bg-[#e64e10] transition duration-300 cursor-pointer"
         >
           {showFilters ? "Hide Filters" : "Show Filters"}
         </button>

@@ -42,26 +42,26 @@ const AppContent = () => {
         payload: { accessToken: storedAccessToken, refreshToken: storedRefreshToken },
       });
       // Fetch user after restoring tokens
-      dispatch(fetchCurrentUser());
+      // dispatch(fetchCurrentUser());
     }
   }, [dispatch]);
 
   // Fetch user on load Auto refresh token
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     if (!accessToken && savedRefreshToken) {
-  //       const refreshRes = await dispatch(refreshToken());
-  //       if (refreshRes.meta.requestStatus === "fulfilled") {
-  //         await dispatch(fetchCurrentUser());
-  //       } else {
-  //         dispatch({ type: "auth/logout" });
-  //       }
-  //     } else if (accessToken) {
-  //       await dispatch(fetchCurrentUser());
-  //     }
-  //   };
-  //   fetchUser();
-  // }, [dispatch, accessToken, savedRefreshToken]);
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!accessToken && savedRefreshToken) {
+        const refreshRes = await dispatch(refreshToken());
+        if (refreshRes.meta.requestStatus === "fulfilled") {
+          await dispatch(fetchCurrentUser());
+        } else {
+          dispatch({ type: "auth/logout" });
+        }
+      } else if (accessToken) {
+        await dispatch(fetchCurrentUser());
+      }
+    };
+    fetchUser();
+  }, [dispatch, accessToken, savedRefreshToken]);
 
   // Auto refresh token
   useEffect(() => {

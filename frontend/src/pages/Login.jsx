@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
 import { fetchCurrentUser, loginUser } from "../store/authSlice";
-
-
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -22,30 +21,34 @@ const Login = () => {
     e.preventDefault();
 
     // Basic validation
-    if (!formData.email || !formData.password) {
-      return;
-    }
+    if (!formData.email || !formData.password) return;
+    // 1️⃣ Dispatch loginUser
     const res = await dispatch(loginUser(formData));
 
     if (res.meta.requestStatus === "fulfilled") {
-      const userRole = res.payload?.role;
+      // const userRole = res.payload?.role;
+      // 2️⃣ Fetch current user after successful login
+      const userRes = await dispatch(fetchCurrentUser());
 
-      if (userRole === "admin") {
-        navigate("/admin/orders"); // ✅ Admin redirect
+      if (userRes.meta.requestStatus === "fulfilled") {
+        const userRole = userRes.payload.role;
+
+        if (userRole === "admin") {
+          navigate("/admin/orders");
+        } else {
+          navigate("/customer/orders");
+        }
       } else {
-        navigate("/customer/orders"); // ✅ Customer redirect
+        console.log("Failed to fetch user after login");
       }
     }
-
 
     // dispatch(loginUser(formData)).then((res) => {
     //   if (res.meta.requestStatus === "fulfilled") {
     //     dispatch(fetchCurrentUser()); // user name add
     //     navigate("/");  // Home page
-    //   } 
+    //   }
     // });
-
-
   };
 
   return (

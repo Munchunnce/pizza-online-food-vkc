@@ -10,14 +10,9 @@ export const registerUser = createAsyncThunk(
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
       const data = await res.json();
+      if (!res.ok) return rejectWithValue(data.message || "Registration failed");
 
-      if (!res.ok) {
-        return rejectWithValue(data.message || "Registration failed");
-      }
-
-      // Tokens ko localStorage mai store karna
       localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
 
@@ -39,8 +34,7 @@ export const loginUser = createAsyncThunk(
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      if (!res.ok && res.status !== 200)
-        return rejectWithValue(data.message || "Login failed");
+      if (!res.ok) return rejectWithValue(data.message || "Login failed");
 
       localStorage.setItem("access_token", data.access_token);
       localStorage.setItem("refresh_token", data.refresh_token);
@@ -65,13 +59,11 @@ export const refreshToken = createAsyncThunk(
         }),
       });
       const data = await res.json();
-      if (!res.ok)
-        return rejectWithValue(data.message || "Token refresh failed");
+      if (!res.ok) return rejectWithValue(data.message || "Token refresh failed");
 
       localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("refresh_token", data.refresh_token);
 
-      return data;
+      return { access_token: data.access_token };
     } catch (err) {
       return rejectWithValue(err.message);
     }
@@ -81,27 +73,19 @@ export const refreshToken = createAsyncThunk(
 // ---------------- GET CURRENT USER ----------------
 export const fetchCurrentUser = createAsyncThunk(
   "auth/fetchCurrentUser",
-  async (_, { dispatch, rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
-        let access_token = localStorage.getItem("access_token");
-      const refresh_token = localStorage.getItem("refresh_token");
-
-      if (!access_token && refresh_token) {
-        // Access token missing, refresh karlo
-        const refreshRes = await dispatch(refreshToken());
-        if (refreshRes.error) return rejectWithValue("Unable to refresh token");
-        access_token = refreshRes.payload.access_token;
-      }
+      const state = getState();
+      const token = state.auth.accessToken;
       const res = await fetch("/api/me", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          Authorization: `Bearer ${token}`,
         },
       });
       const data = await res.json();
-      if (!res.ok)
-        return rejectWithValue(data.message || "Failed to fetch user");
+      if (!res.ok) return rejectWithValue(data.message || "Failed to fetch user");
       return data;
     } catch (err) {
       return rejectWithValue(err.message);
@@ -112,7 +96,7 @@ export const fetchCurrentUser = createAsyncThunk(
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    user: null,
+    user: JSON.parse(localStorage.getItem("user")) || null,
     accessToken: localStorage.getItem("access_token") || null,
     refreshToken: localStorage.getItem("refresh_token") || null,
     loading: false,
@@ -125,6 +109,11 @@ const authSlice = createSlice({
       state.refreshToken = null;
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
+      localStorage.removeItem("user");
+    },
+    restoreTokens: (state, action) => {
+      state.accessToken = action.payload.accessToken;
+      state.refreshToken = action.payload.refreshToken;
     },
   },
   extraReducers: (builder) => {
@@ -138,11 +127,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.accessToken = action.payload.access_token;
         state.refreshToken = action.payload.refresh_token;
-        // jo form submit hua uska naam/email redux mai store
-        state.user = {
-          email: action.meta.arg.email,
-          name: action.meta.arg.name,
-        };
+        state.user = { email: action.meta.arg.email, name: action.meta.arg.name };
+        localStorage.setItem("user", JSON.stringify(state.user));
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -159,10 +145,8 @@ const authSlice = createSlice({
         state.loading = false;
         state.accessToken = action.payload.access_token;
         state.refreshToken = action.payload.refresh_token;
-        state.user = {
-          name: action.payload.name,  // user name store
-          role: action.payload.role,
-        };
+        state.user = { name: action.payload.name, role: action.payload.role };
+        localStorage.setItem("user", JSON.stringify(state.user));
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -178,17 +162,20 @@ const authSlice = createSlice({
       .addCase(refreshToken.fulfilled, (state, action) => {
         state.loading = false;
         state.accessToken = action.payload.access_token;
-        state.refreshToken = action.payload.refresh_token;
+        // ❌ Don't overwrite refreshToken
       })
       .addCase(refreshToken.rejected, (state, action) => {
         state.loading = false;
         state.accessToken = null;
         state.refreshToken = null;
+        state.user = null;
         state.error = action.payload || "Token refresh failed";
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
+        localStorage.removeItem("user");
       });
-      // Fetch Current User
+
+    // Fetch Current User
     builder
       .addCase(fetchCurrentUser.pending, (state) => {
         state.loading = true;
@@ -196,11 +183,8 @@ const authSlice = createSlice({
       })
       .addCase(fetchCurrentUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.user = { 
-          name: action.payload.name, // sirf name store karo
-          role: action.payload.role,
-         };
-        localStorage.setItem("user", JSON.stringify(state.user)); 
+        state.user = { name: action.payload.name, role: action.payload.role };
+        localStorage.setItem("user", JSON.stringify(state.user));
       })
       .addCase(fetchCurrentUser.rejected, (state, action) => {
         state.loading = false;
@@ -208,11 +192,9 @@ const authSlice = createSlice({
         state.accessToken = null;
         state.refreshToken = null;
         state.error = action.payload || "Failed to fetch user";
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
       });
   },
 });
 
-export const { logout } = authSlice.actions;
+export const { logout, restoreTokens } = authSlice.actions;
 export default authSlice.reducer;

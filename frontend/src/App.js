@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Provider, useDispatch } from "react-redux";
+import { Provider, useDispatch, useSelector } from "react-redux";
 import Navigation from "./components/Navigation";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
@@ -13,7 +13,7 @@ import SingleProducts from "./pages/SingleProducts";
 import store from "./store/store";
 import Footer from "./pages/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
-import { fetchCurrentUser } from "./store/authSlice";
+import { fetchCurrentUser, logout, refreshToken, restoreTokens } from "./store/authSlice";
 import { useEffect } from "react";
 import Orders from "./pages/Orders";
 import SingleOrder from "./pages/SingleOrder";
@@ -26,16 +26,51 @@ const stripePromise = loadStripe(
   "pk_test_51SDlgPRz3ObFp51Jl6MYMamJjAAtFf03juq4FEQCSQuq1l2lJPQvjktWk6YZETIxySNgc1fZyg18mhchrJLRXzO000K1k53Qp7"
 );
 
-// Yeh component refresh hone ke baad user ko dobara Redux me laayega
 const AppContent = () => {
   const dispatch = useDispatch();
+  const { accessToken, refreshToken: savedRefreshToken } = useSelector(
+    (state) => state.auth
+  );
 
+  // Restore tokens from localStorage
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    if (token) {
-      dispatch(fetchCurrentUser());
+    const storedAccessToken = localStorage.getItem("access_token");
+    const storedRefreshToken = localStorage.getItem("refresh_token");
+    if (storedAccessToken && storedRefreshToken) {
+      dispatch(
+        restoreTokens({
+          accessToken: storedAccessToken,
+          refreshToken: storedRefreshToken,
+        })
+      );
     }
   }, [dispatch]);
+
+  // Fetch user on load
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!accessToken && savedRefreshToken) {
+        const refreshRes = await dispatch(refreshToken());
+        if (refreshRes.meta.requestStatus === "fulfilled") {
+          await dispatch(fetchCurrentUser());
+        } else {
+          dispatch({ type: "auth/logout" });
+        }
+      } else if (accessToken) {
+        await dispatch(fetchCurrentUser());
+      }
+    };
+    fetchUser();
+  }, [dispatch, accessToken, savedRefreshToken]);
+
+  // Auto refresh token
+  useEffect(() => {
+    if (!savedRefreshToken) return;
+    const interval = setInterval(() => {
+      dispatch(refreshToken());
+    }, 50 * 1000);
+    return () => clearInterval(interval);
+  }, [dispatch, savedRefreshToken]);
 
   return (
     <>

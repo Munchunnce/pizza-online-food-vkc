@@ -162,7 +162,7 @@ const authSlice = createSlice({
       .addCase(refreshToken.fulfilled, (state, action) => {
         state.loading = false;
         state.accessToken = action.payload.access_token;
-        // ❌ Don't overwrite refreshToken
+        //  Don't overwrite refreshToken
       })
       .addCase(refreshToken.rejected, (state, action) => {
         state.loading = false;

@@ -67,4 +67,5 @@ const useAuthFetch = (url, options = {}) => {
   return { data, loading, error, refetch: fetchData };
 };
 
+
 export default useAuthFetch;

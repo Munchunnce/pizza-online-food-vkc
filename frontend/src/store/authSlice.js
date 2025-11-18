@@ -94,6 +94,7 @@ export const fetchCurrentUser = createAsyncThunk(
   }
 );
 
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {

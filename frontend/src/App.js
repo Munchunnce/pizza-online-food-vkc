@@ -26,6 +26,7 @@ const stripePromise = loadStripe(
   "pk_test_51SDlgPRz3ObFp51Jl6MYMamJjAAtFf03juq4FEQCSQuq1l2lJPQvjktWk6YZETIxySNgc1fZyg18mhchrJLRXzO000K1k53Qp7"
 );
 
+
 const AppContent = () => {
   const dispatch = useDispatch();
   const { accessToken, refreshToken: savedRefreshToken } = useSelector(

@@ -125,7 +125,7 @@ function App() {
     <div className="App flex flex-col min-h-screen">
       <Provider store={store}>
         <BrowserRouter>
-          {/* ✅ Stripe Elements wrapper here */}
+          {/*  Stripe Elements wrapper here */}
           <Elements stripe={stripePromise}>
             <AppContent />
           </Elements>

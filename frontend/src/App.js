@@ -22,7 +22,6 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
 
-
 //  Stripe public key
 const stripePromise = loadStripe(
   "pk_test_51SDlgPRz3ObFp51Jl6MYMamJjAAtFf03juq4FEQCSQuq1l2lJPQvjktWk6YZETIxySNgc1fZyg18mhchrJLRXzO000K1k53Qp7"

@@ -74,6 +74,7 @@ const AppContent = () => {
     return () => clearInterval(interval);
   }, [dispatch, savedRefreshToken]);
 
+  
   return (
     <>
       <Navigation />

@@ -75,8 +75,9 @@ app.use("/uploads", express.static("uploads"));
 app.use(errorhandler);
 
 app.get("/", (req, res) => {
+  console.log('beta')
   res.send("🚀 Backend is running successfully on Vercel!");
 });
 
-// server.listen(APP_PORT, () => console.log(`Lisenting on port ${APP_PORT}.`));
+server.listen(APP_PORT, () => console.log(`Lisenting on port ${APP_PORT}.`));
 export default app;

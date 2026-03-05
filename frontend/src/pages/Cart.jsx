@@ -61,7 +61,7 @@ const Cart = () => {
     };
 
     try {
-      const res = await fetch("/api/orders", {
+      const res = await fetch("https://pizza-online-food-vkc-api-server.vercel.app/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

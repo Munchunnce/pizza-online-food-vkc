@@ -78,4 +78,5 @@ app.get("/", (req, res) => {
   res.send("🚀 Backend is running successfully on Vercel!");
 });
 
-server.listen(APP_PORT, () => console.log(`Lisenting on port ${APP_PORT}.`));
+// server.listen(APP_PORT, () => console.log(`Lisenting on port ${APP_PORT}.`));
+export default app;

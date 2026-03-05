@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/authSlice"; // logout action
 
+
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dispatch = useDispatch();
@@ -95,5 +96,6 @@ const Navigation = () => {
     </nav>
   );
 };
+
 
 export default Navigation;

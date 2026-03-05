@@ -12,6 +12,7 @@ const Footer = () => {
     setEmail("");
   };
 
+  
   return (
     <footer className="bg-[#1F1F1F] text-white py-16 mt-12">
       <div className="container mx-auto flex flex-col lg:flex-row justify-between items-start lg:items-center gap-12 lg:gap-0">

@@ -10,6 +10,7 @@ const AdminRoute = ({ children }) => {
     return <Navigate to="/login" replace />;
   }
 
+  
   // Agar Redux store me user abhi null hai, localStorage se check karo
   const storedUser = JSON.parse(localStorage.getItem("user") || "null");
   const currentUser = user || storedUser;
@@ -22,5 +23,6 @@ const AdminRoute = ({ children }) => {
   // Sab check pass, route access allow
   return children;
 };
+
 
 export default AdminRoute;

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+
 // ---------------- REGISTER ----------------
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
@@ -93,6 +94,7 @@ export const fetchCurrentUser = createAsyncThunk(
   }
 );
 
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -162,7 +164,7 @@ const authSlice = createSlice({
       .addCase(refreshToken.fulfilled, (state, action) => {
         state.loading = false;
         state.accessToken = action.payload.access_token;
-        // ❌ Don't overwrite refreshToken
+        //  Don't overwrite refreshToken
       })
       .addCase(refreshToken.rejected, (state, action) => {
         state.loading = false;

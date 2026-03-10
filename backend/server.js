@@ -27,7 +27,7 @@ const io = new Server(server, {
 
 //  Socket.io connection
 io.on("connection", (socket) => {
-  console.log("🟢 User connected:", socket.id);
+  console.log(" User connected:", socket.id);
 
   // join room per user
   socket.on("join_room", (orderId) => {

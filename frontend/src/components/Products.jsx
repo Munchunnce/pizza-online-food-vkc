@@ -1,35 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Product from "./Product";
 
-
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [filterSize, setFilterSize] = useState("all");
   const [sortPrice, setSortPrice] = useState("default"); // low, high, medium
   const [showFilters, setShowFilters] = useState(false); // toggle filter
 
-  // useEffect(() => {
-  //   fetch('https://pizza-online-food-vkc-api-server.vercel.app/api/products')
-  //     .then((res) => res.json())
-  //     .then((products) => {
-  //       setProducts(products);
-  //     });
-  // }, []);
-
   useEffect(() => {
-  fetch("https://pizza-online-food-vkc-api-server.vercel.app/api/products")
-    .then((res) => res.json())
-    .then((data) => {
-      if (Array.isArray(data)) {
-        setProducts(data);
-      } else if (data.products) {
-        setProducts(data.products);
-      } else {
-        console.error("API did not return array:", data);
-      }
-    })
-    .catch((err) => console.error("Fetch error:", err));
-}, []);
+    fetch('https://pizza-online-food-vkc-api-server.vercel.app/api/products')
+      .then((res) => res.json())
+      .then((products) => {
+        setProducts(products);
+      });
+  }, []);
 
   // Filter logic
   let filteredProducts =

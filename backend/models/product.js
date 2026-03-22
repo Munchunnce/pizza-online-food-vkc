@@ -13,7 +13,7 @@ const productSchema = new Schema({
             if (!image) return null;
             if (image.startsWith('http')) return image;
             // return `${APP_URL}/${image}`;
-            return { image }
+            return { image };
         }
     },
 }, { timestamps: true, toJSON: { getters: true }, id: false });

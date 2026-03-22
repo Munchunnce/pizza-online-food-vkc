@@ -11,6 +11,7 @@ const Products = () => {
     fetch('https://pizza-online-food-vkc-api-server.vercel.app/api/products')
       .then((res) => res.json())
       .then((products) => {
+        // console.log(products, 'vkc')
         setProducts(products);
       });
   }, []);

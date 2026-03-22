@@ -6,7 +6,7 @@ import adminRoutes from "./routes/index.js";
 import mongoose from "mongoose";
 import cors from 'cors';
 import path from "path";
-import { fileURLToPath } from "url"; // ⬅️ Add this
+import { fileURLToPath } from "url"; // Add this
 import { createServer } from "http";
 import { Server } from "socket.io";
 
@@ -75,9 +75,7 @@ app.use("/uploads", express.static("uploads"));
 app.use(errorhandler);
 
 app.get("/", (req, res) => {
-  console.log('beta')
   res.send("🚀 Backend is running successfully on Vercel!");
 });
 
 server.listen(APP_PORT, () => console.log(`Lisenting on port ${APP_PORT}.`));
-export default app;

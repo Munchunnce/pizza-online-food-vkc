@@ -16,7 +16,7 @@ const AdminOrders = () => {
 
   useEffect(() => {
     // Socket connection
-    socket.current = io("http://localhost:5000");
+    socket.current = io("https://pizza-online-food-vkc-api-server.vercel.app");
 
     // Admin join orders room
     socket.current.emit("join_orders_room");

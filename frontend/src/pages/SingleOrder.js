@@ -5,7 +5,7 @@ import Toast from "../components/Toast/Toast"
 
 
 
-const socket = io("http://localhost:5000", { transports: ["websocket"] });
+const socket = io("https://pizza-online-food-vkc-api-server.vercel.app", { transports: ["websocket"] });
 
 // Line Awesome icons
 const statusSteps = [

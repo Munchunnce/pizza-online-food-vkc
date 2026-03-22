@@ -5,16 +5,43 @@ import CustomErrorHandle from "../services/CustomErrorHandler.js";
 import fs from 'fs';
 import productSchema from "../validator/productValidator.js";
 
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } from "../config/index.js";
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, 'uploads/'),
-    filename: (req, file, cb) => {
-        const uniqueName = `${Date.now()}-${Math.random() * 1E9}${path.extname(file.originalname)}`;
-        cb(null, uniqueName);
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: CLOUDINARY_CLOUD_NAME,
+    api_key: CLOUDINARY_API_KEY,
+    api_secret: CLOUDINARY_API_SECRET
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'pizza/products',
+        allowed_formats: ['jpg', 'png', 'jpeg', 'webp']
     }
 });
 
 const handlerMultipartData = multer({storage, limits: { fileSize: 1000000 * 5 } }).single('image');
+
+const deleteCloudinaryImage = async (imageUrl) => {
+    try {
+        if (!imageUrl || !imageUrl.includes('cloudinary')) return;
+        const splitUrl = imageUrl.split('/upload/');
+        if(splitUrl.length > 1) {
+            const pathAfterUpload = splitUrl[1];
+            const parts = pathAfterUpload.split('/');
+            parts.shift(); // remove version tag
+            const publicIdWithExt = parts.join('/');
+            const publicId = publicIdWithExt.substring(0, publicIdWithExt.lastIndexOf('.'));
+            await cloudinary.uploader.destroy(publicId);
+        }
+    } catch(err) {
+        console.error("Cloudinary delete error:", err);
+    }
+};
 
 
 const productController = {
@@ -24,17 +51,13 @@ const productController = {
             if(err){
                 return next(CustomErrorHandle.serverError(err.message));
             }
-            const filePath = req.file.path.replace(/\\/g, '/');
+            const filePath = req.file.path;
             // validate
             const { error } = productSchema.validate(req.body);
                             
             if(error){
                 //Delete the uploaded file
-                fs.unlink(`${appRoot}/${filePath}`, (err) => {
-                    if(err){
-                        return next(CustomErrorHandle.serverError(err.message));
-                    }
-                });
+                await deleteCloudinaryImage(filePath);
                 return next(error);
             }
 
@@ -63,7 +86,7 @@ const productController = {
 
             let filePath;
             if(req.file){
-                filePath = req.file.path.replace(/\\/g, '/');
+                filePath = req.file.path;
             }
             // validate
             const { error } = productSchema.validate(req.body);
@@ -71,11 +94,7 @@ const productController = {
             if(error){
                 //Delete the uploaded file
                 if(req.file){
-                    fs.unlink(`${appRoot}/${filePath}`, (err) => {
-                        if(err){
-                            return next(CustomErrorHandle.serverError(err.message));
-                        }
-                    });
+                    await deleteCloudinaryImage(filePath);
                 }
                 return next(error);
             }
@@ -103,11 +122,13 @@ const productController = {
         }
         //image
         const imagePath = document._doc.image;
-        fs.unlink(`${appRoot}/${imagePath}`, (err) => {
-            if(err){
-                return next(CustomErrorHandle.serverError());
-            }
-        });
+        if (imagePath && imagePath.includes('cloudinary')) {
+            await deleteCloudinaryImage(imagePath);
+        } else if (imagePath) {
+            fs.unlink(`${appRoot}/${imagePath}`, (err) => {
+                if(err) console.error(err);
+            });
+        }
         res.json(document);
     },
 

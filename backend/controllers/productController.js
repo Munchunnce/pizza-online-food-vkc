@@ -6,7 +6,7 @@ import fs from 'fs';
 import productSchema from "../validator/productValidator.js";
 
 import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { Readable } from 'stream';
 import { CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } from "../config/index.js";
 
 // Configure Cloudinary
@@ -16,13 +16,20 @@ cloudinary.config({
     api_secret: CLOUDINARY_API_SECRET
 });
 
-const storage = new CloudinaryStorage({
-    cloudinary: cloudinary,
-    params: {
-        folder: 'pizza/products',
-        allowed_formats: ['jpg', 'png', 'jpeg', 'webp']
-    }
-});
+const storage = multer.memoryStorage();
+
+const uploadToCloudinary = (buffer) => {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { folder: 'pizza/products' },
+            (error, result) => {
+                if (error) return reject(error);
+                resolve(result);
+            }
+        );
+        Readable.from(buffer).pipe(stream);
+    });
+};
 
 const handlerMultipartData = multer({storage, limits: { fileSize: 1000000 * 5 } }).single('image');
 
@@ -51,14 +58,23 @@ const productController = {
             if(err){
                 return next(CustomErrorHandle.serverError(err.message));
             }
-            const filePath = req.file.path;
             // validate
             const { error } = productSchema.validate(req.body);
                             
             if(error){
-                //Delete the uploaded file
-                await deleteCloudinaryImage(filePath);
                 return next(error);
+            }
+
+            let filePath = '';
+            if (req.file) {
+                try {
+                    const result = await uploadToCloudinary(req.file.buffer);
+                    filePath = result.secure_url;
+                } catch (uploadErr) {
+                    return next(CustomErrorHandle.serverError('Image upload failed'));
+                }
+            } else {
+                return next(CustomErrorHandle.serverError('Image is required'));
             }
 
             const { name, price, size } = req.body;
@@ -84,19 +100,21 @@ const productController = {
                 return next(CustomErrorHandle.serverError(err.message));
             }
 
-            let filePath;
-            if(req.file){
-                filePath = req.file.path;
-            }
             // validate
             const { error } = productSchema.validate(req.body);
                             
             if(error){
-                //Delete the uploaded file
-                if(req.file){
-                    await deleteCloudinaryImage(filePath);
-                }
                 return next(error);
+            }
+
+            let filePath;
+            if(req.file){
+                try {
+                    const result = await uploadToCloudinary(req.file.buffer);
+                    filePath = result.secure_url;
+                } catch (uploadErr) {
+                    return next(CustomErrorHandle.serverError('Image upload failed'));
+                }
             }
 
             const { name, price, size } = req.body;

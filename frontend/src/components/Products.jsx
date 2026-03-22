@@ -18,20 +18,42 @@ const Products = () => {
 
   // Filter logic
   let filteredProducts =
-    filterSize === "all"
-      ? products
-      : products.filter((p) => p.size.toLowerCase() === filterSize);
+  filterSize === "all"
+    ? [...products] // copy banayi
+    : products.filter(
+        (p) => p.size?.toLowerCase() === filterSize // safe check
+      );
 
-  if (sortPrice === "low") {
-    filteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
-  } else if (sortPrice === "high") {
-    filteredProducts = filteredProducts.sort((a, b) => b.price - a.price);
-  } else if (sortPrice === "medium") {
-    // Medium price range, example 200-500
-    filteredProducts = filteredProducts.filter(
-      (p) => p.price >= 200 && p.price <= 500
-    );
-  }
+// Sorting (immutable)
+if (sortPrice === "low") {
+  filteredProducts = [...filteredProducts].sort(
+    (a, b) => a.price - b.price
+  );
+} else if (sortPrice === "high") {
+  filteredProducts = [...filteredProducts].sort(
+    (a, b) => b.price - a.price
+  );
+} else if (sortPrice === "medium") {
+  // filter only, no mutation issue
+  filteredProducts = filteredProducts.filter(
+    (p) => p.price >= 200 && p.price <= 500
+  );
+}
+  // let filteredProducts =
+  //   filterSize === "all"
+  //     ? products
+  //     : products.filter((p) => p.size.toLowerCase() === filterSize);
+
+  // if (sortPrice === "low") {
+  //   filteredProducts = filteredProducts.sort((a, b) => a.price - b.price);
+  // } else if (sortPrice === "high") {
+  //   filteredProducts = filteredProducts.sort((a, b) => b.price - a.price);
+  // } else if (sortPrice === "medium") {
+  //   // Medium price range, example 200-500
+  //   filteredProducts = filteredProducts.filter(
+  //     (p) => p.price >= 200 && p.price <= 500
+  //   );
+  // }
 
   return (
     <div className="container bg-[#F8F8F8] mx-auto pb-24 px-4">

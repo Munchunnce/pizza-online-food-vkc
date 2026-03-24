@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 
+
 // ---------------- REGISTER ----------------
 export const registerUser = createAsyncThunk(
   "auth/registerUser",

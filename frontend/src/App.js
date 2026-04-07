@@ -17,7 +17,6 @@ import { fetchCurrentUser, logout, refreshToken, restoreTokens } from "./store/a
 import { useEffect } from "react";
 import Orders from "./pages/Orders";
 import SingleOrder from "./pages/SingleOrder";
-
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 

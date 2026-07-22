@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { refreshToken, logout } from "../redux/slices/authSlice";
-
 const useAuthFetch = (url, options = {}) => {
   const dispatch = useDispatch();
   const { accessToken, refreshToken: storedRefreshToken } = useSelector(state => state.auth);

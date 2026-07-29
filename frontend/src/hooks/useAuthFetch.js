@@ -8,6 +8,7 @@ const useAuthFetch = (url, options = {}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  
   const fetchData = async () => {
     setLoading(true);
     try {

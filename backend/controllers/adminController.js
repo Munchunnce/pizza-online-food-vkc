@@ -12,6 +12,7 @@ const adminController = {
     }
   },
 
+  
   async updateStatus(req, res, next) {
     try {
       const { orderId, status } = req.body;

@@ -9,7 +9,6 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 
-
 const Cart = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
